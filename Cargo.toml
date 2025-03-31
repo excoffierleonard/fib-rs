@@ -19,3 +19,11 @@ num-format = "0.4.4"
 [[bench]]
 name = "benchmarks"
 harness = false
+
+[[bin]]
+name = "fib"
+path = "src/bin/cli.rs"
+
+[[bin]]
+name = "fib-web"
+path = "src/bin/web.rs"
