@@ -11,6 +11,8 @@ fn criterion_benchmark(c: &mut Criterion) {
         let mut group = c.benchmark_group("Big Inputs");
         group.sample_size(10);
         group.bench_function("1M Input", |b| b.iter(|| fib(black_box(1000000))));
+        group.bench_function("10M Input", |b| b.iter(|| fib(black_box(10000000))));
+        group.bench_function("100M Input", |b| b.iter(|| fib(black_box(100000000))));
     }
 }
 
