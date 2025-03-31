@@ -7,21 +7,9 @@ pub fn fib(n: u128) -> BigUint {
     match n {
         0 => BigUint::zero(),
         1 => BigUint::one(),
-        n if n <= 93 => BigUint::from(fib_fast_doubling_primitive_helper(n).0),
-        n if n <= 186 => BigUint::from(fib_primitives_helper(n as u8)),
+        n if n <= 185 => BigUint::from(fib_fast_doubling_primitive_helper(n).0),
         _ => fib_fast_doubling_helper(n).0,
     }
-}
-
-fn fib_primitives_helper(n: u8) -> u128 {
-    let mut prev = 0;
-    let mut curr = 1;
-    for _ in 2..=n {
-        let next = prev + curr;
-        prev = curr;
-        curr = next;
-    }
-    curr
 }
 
 fn fib_fast_doubling_primitive_helper(n: u128) -> (u128, u128) {
@@ -77,5 +65,28 @@ fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn limits() {
+        // Up to u128 calculations
+        for i in 2..=185 {
+            fib_fast_doubling_primitive_helper(i);
+        }
+        // Beyond u8 inputs
+        for i in 186..=256 {
+            fib_fast_doubling_helper(i);
+        }
+    }
+
+    #[test]
+    #[should_panic]
+    fn limit_break_u128_calculations() {
+        fib_fast_doubling_primitive_helper(186);
     }
 }
