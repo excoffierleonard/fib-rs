@@ -11,7 +11,7 @@ pub fn fib(n: u128) -> BigUint {
     }
 }
 
-pub fn fib_primitives(n: u8) -> u128 {
+fn fib_primitives(n: u8) -> u128 {
     match n {
         0 => 0,
         1 => 1,
@@ -28,7 +28,7 @@ pub fn fib_primitives(n: u8) -> u128 {
     }
 }
 
-pub fn fib_beyond_max_primitives(n: u128) -> BigUint {
+fn fib_beyond_max_primitives(n: u128) -> BigUint {
     match n {
         0 => BigUint::zero(),
         1 => BigUint::one(),
