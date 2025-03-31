@@ -1,5 +1,5 @@
 use criterion::{Criterion, black_box, criterion_group, criterion_main};
-use fib::fib;
+use fib_rs::fib;
 use num_format::ToFormattedString;
 use std::time::{Duration, Instant};
 

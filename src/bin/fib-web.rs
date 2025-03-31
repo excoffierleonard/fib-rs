@@ -52,6 +52,6 @@ impl Responder for FibResponse {
 #[post("/fib")]
 async fn fib_handler(args: Json<FibArgs>) -> FibResponse {
     FibResponse {
-        f: fib::fib(args.n).to_string(),
+        f: fib_rs::fib(args.n).to_string(),
     }
 }

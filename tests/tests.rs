@@ -1,4 +1,4 @@
-use fib::fib;
+use fib_rs::fib;
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
 use std::str::FromStr;
