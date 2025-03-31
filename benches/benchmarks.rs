@@ -14,6 +14,12 @@ fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("Max u8 Input | Indirect", |b| {
         b.iter(|| fib(black_box(255)))
     });
+    c.bench_function("Big Input | Direct", |b| {
+        b.iter(|| fib_beyond_max_primitives(black_box(100000)))
+    });
+    c.bench_function("Big Input | Indirect", |b| {
+        b.iter(|| fib(black_box(100000)))
+    });
 }
 
 criterion_group!(benches, criterion_benchmark,);

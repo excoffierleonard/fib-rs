@@ -4,7 +4,7 @@ use fibtest::fib;
 #[derive(Parser)]
 struct Args {
     /// The nth Fibonacci number to compute
-    n: u8,
+    n: u128,
 }
 
 fn main() {

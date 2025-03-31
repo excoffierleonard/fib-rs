@@ -1,13 +1,12 @@
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
-use std::str::FromStr;
 
 /// Given a number n, return the nth Fibonacci number.
-pub fn fib(n: u8) -> BigUint {
+pub fn fib(n: u128) -> BigUint {
     match n {
         0 => BigUint::zero(),
         1 => BigUint::one(),
-        n if n <= 186 => BigUint::from(fib_primitives(n)),
+        n if n <= 186 => BigUint::from(fib_primitives(n as u8)),
         _ => fib_beyond_max_primitives(n),
     }
 }
@@ -29,7 +28,7 @@ pub fn fib_primitives(n: u8) -> u128 {
     }
 }
 
-pub fn fib_beyond_max_primitives(n: u8) -> BigUint {
+pub fn fib_beyond_max_primitives(n: u128) -> BigUint {
     match n {
         0 => BigUint::zero(),
         1 => BigUint::one(),
@@ -49,6 +48,7 @@ pub fn fib_beyond_max_primitives(n: u8) -> BigUint {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[test]
     fn correct_formula() {
@@ -69,7 +69,7 @@ mod tests {
     }
 
     #[test]
-    fn max_primitives_input() {
+    fn max_primitives_output() {
         assert_eq!(fib_primitives(186), 332825110087067562321196029789634457848);
         assert_eq!(
             fib_beyond_max_primitives(186),
@@ -83,27 +83,31 @@ mod tests {
 
     #[test]
     #[should_panic]
-    fn more_than_max_primitives_output_panics() {
+    fn beyond_u128_output_primitives_panics() {
         fib_primitives(187);
     }
 
     #[test]
-    fn beyond_u128_works() {
+    fn beyond_u128_output_works() {
         assert_eq!(
             fib_beyond_max_primitives(187),
             BigUint::from_str("538522340430300790495419781092981030533").unwrap()
         );
         assert_eq!(
-            fib_beyond_max_primitives(255),
-            BigUint::from_str("87571595343018854458033386304178158174356588264390370").unwrap()
-        );
-        assert_eq!(
             fib(187),
             BigUint::from_str("538522340430300790495419781092981030533").unwrap()
         );
+    }
+
+    #[test]
+    fn beyond_u8_input_works() {
         assert_eq!(
-            fib(255),
-            BigUint::from_str("87571595343018854458033386304178158174356588264390370").unwrap()
+            fib_beyond_max_primitives(256),
+            BigUint::from_str("141693817714056513234709965875411919657707794958199867").unwrap()
+        );
+        assert_eq!(
+            fib(256),
+            BigUint::from_str("141693817714056513234709965875411919657707794958199867").unwrap()
         );
     }
 }
