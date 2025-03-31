@@ -13,7 +13,6 @@ fn criterion_benchmark(c: &mut Criterion) {
         group.bench_function("100K Input", |b| b.iter(|| fib(black_box(100000))));
         group.bench_function("1M Input", |b| b.iter(|| fib(black_box(1000000))));
         group.bench_function("10M Input", |b| b.iter(|| fib(black_box(10000000))));
-        group.bench_function("100M Input", |b| b.iter(|| fib(black_box(100000000))));
     }
 }
 
