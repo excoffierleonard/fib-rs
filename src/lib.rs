@@ -3,7 +3,6 @@ use num_traits::{One, Zero};
 
 /// Given a number n, return the nth Fibonacci number.
 pub fn fib(n: u128) -> BigUint {
-    // TODO: Implement Matrix exponentiation
     match n {
         0 => BigUint::zero(),
         1 => BigUint::one(),
