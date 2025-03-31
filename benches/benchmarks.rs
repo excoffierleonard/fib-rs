@@ -1,5 +1,5 @@
 use criterion::{Criterion, black_box, criterion_group, criterion_main};
-use fibtest::fib;
+use fib::fib;
 
 fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("Max u128 Output", |b| b.iter(|| fib(black_box(186))));

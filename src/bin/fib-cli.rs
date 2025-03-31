@@ -1,5 +1,5 @@
 use clap::Parser;
-use fibtest::fib;
+use fib::fib;
 
 #[derive(Parser)]
 struct Args {
