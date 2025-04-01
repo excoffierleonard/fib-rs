@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
+documentation = "https://docs.rs/fib-rs"
 license = "MIT"
 keywords = ["fibonacci", "math", "algorithm"]
 categories = ["algorithms", "mathematics"]
