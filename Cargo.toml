@@ -6,7 +6,7 @@ description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
 documentation = "https://docs.rs/fib-rs"
 license = "MIT"
-keywords = ["fibonacci", "fib", "fib-rs", "math", "algorithm", "primes"]
+keywords = ["fibonacci", "fib", "fib-rs", "math", "algorithm"]
 categories = ["algorithms", "mathematics", "number-theory"]
 readme = "README.md"
 
