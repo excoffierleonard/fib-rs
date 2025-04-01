@@ -62,9 +62,10 @@ PORT=3000 fib-web
 Then send a POST request:
 
 ```bash
-curl -X POST -H "Content-Type: application/json" \
-  -d '{"n": 100}' \
-  http://localhost:8080/fib
+curl --request POST \
+     --url "http://localhost:8080/fib" \
+     --header "Content-Type: application/json" \
+     --data '{"n": 100}'
 ```
 
 Response:

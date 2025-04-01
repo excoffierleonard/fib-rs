@@ -1,7 +1,46 @@
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
 
-/// Given a number n, return the nth Fibonacci number.
+/// Calculate the nth Fibonacci number using an optimized fast doubling algorithm.
+///
+/// This function efficiently computes Fibonacci numbers of arbitrary size by using
+/// a divide-and-conquer approach based on matrix identities.
+///
+/// # Arguments
+///
+/// * `n` - The index of the Fibonacci number to calculate (0-indexed, where F(0)=0, F(1)=1)
+///
+/// # Returns
+///
+/// * The nth Fibonacci number as a `BigUint`
+///
+/// # Performance
+///
+/// * For n ≤ 185: Uses primitive u128 arithmetic for maximum performance
+/// * For n > 185: Automatically switches to arbitrary precision with BigUint
+///
+/// # Complexity
+///
+/// * Time complexity: O(log n) due to the fast doubling algorithm
+/// * Space complexity: O(log n) for the recursive call stack
+///
+/// # Examples
+///
+/// ```
+/// use fib_rs::fib;
+/// use num_bigint::BigUint;
+/// use num_traits::Zero;
+///
+/// // F(0) = 0
+/// assert_eq!(fib(0), BigUint::zero());
+///
+/// // F(10) = 55
+/// assert_eq!(fib(10), BigUint::from(55u32));
+///
+/// // Large value example (would overflow primitive types)
+/// let fib_200 = fib(200);
+/// assert!(fib_200 > BigUint::from(u128::MAX));
+/// ```
 pub fn fib(n: u128) -> BigUint {
     match n {
         0 => BigUint::zero(),
