@@ -1,13 +1,13 @@
 [package]
 name = "fib-rs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
 documentation = "https://docs.rs/fib-rs"
 license = "MIT"
-keywords = ["fibonacci", "math", "algorithm"]
-categories = ["algorithms", "mathematics"]
+keywords = ["fibonacci", "fib", "fib-rs", "math", "algorithm", "primes"]
+categories = ["algorithms", "mathematics", "number-theory"]
 readme = "README.md"
 
 [features]
