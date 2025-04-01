@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/fib-rs.svg)](https://crates.io/crates/fib-rs)
 [![Documentation](https://docs.rs/fib-rs/badge.svg)](https://docs.rs/fib-rs)
-[![MIT/Apache-2.0 licensed](https://img.shields.io/crates/l/fib-rs.svg)](LICENSE)
+[![MIT](https://img.shields.io/crates/l/fib-rs.svg)](LICENSE)
 
 A highly optimized Fibonacci number calculator for Rust that efficiently computes arbitrarily large Fibonacci numbers.
 
@@ -91,19 +91,19 @@ The implementation uses a fast doubling algorithm with the following optimizatio
 
 Benchmark results:
 
-Specification:
+Specifications:
 
-- 15-inch MacBook Air
+- 15-inch MacBook Air (2025)
 - M4 Chip, 10C CPU, 10C GPU
 - 32GB Unified Memory
+- macOS Sequoia 15.4
 
 | Input Size | Computation Time |
 |------------|------------------|
-| F(185)     | ~2μs             |
-| F(1,000)   | ~20μs            |
-| F(10,000)  | ~400μs           |
-| F(100,000) | ~6ms             |
-| F(1,000,000)| ~90ms           |
+| F(1,000)   | ~876ns           |
+| F(10,000)  | ~8μs             |
+| F(100,000) | ~10ms            |
+| F(1,000,000)| ~329ms          |
 
 ## Algorithm Details
 
