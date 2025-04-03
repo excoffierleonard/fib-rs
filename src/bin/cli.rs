@@ -9,6 +9,6 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let result = fib(args.n);
-    println!("{}", result);
+    let f_n = fib(args.n);
+    println!("{}", f_n);
 }
