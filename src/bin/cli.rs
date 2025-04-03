@@ -1,4 +1,5 @@
 use clap::Parser;
+use fib_rs::fib;
 
 #[derive(Parser)]
 struct Args {
@@ -8,5 +9,5 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    println!("{}", fib_rs::fib(args.n));
+    println!("{}", fib(args.n));
 }

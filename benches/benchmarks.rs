@@ -3,19 +3,14 @@ use fib_rs::fib;
 use num_format::ToFormattedString;
 use std::time::{Duration, Instant};
 
-fn basics(c: &mut Criterion) {
-    c.bench_function("Max u128 Calculation", |b| b.iter(|| fib(black_box(185))));
-    c.bench_function("Max u128 Output", |b| b.iter(|| fib(black_box(186))));
-    c.bench_function("Max u8 Input", |b| b.iter(|| fib(black_box(255))));
-    {
-        let mut group = c.benchmark_group("Big Inputs");
-        group.sample_size(10);
-        group.bench_function("1K Input", |b| b.iter(|| fib(black_box(1000))));
-        group.bench_function("10K Input", |b| b.iter(|| fib(black_box(10000))));
-        group.bench_function("100K Input", |b| b.iter(|| fib(black_box(100000))));
-        group.bench_function("1M Input", |b| b.iter(|| fib(black_box(1000000))));
-        group.bench_function("10M Input", |b| b.iter(|| fib(black_box(10000000))));
-    }
+fn criterion_benchmark(c: &mut Criterion) {
+    let mut g = c.benchmark_group("F(n) Benchmarks");
+    g.sample_size(10);
+    g.bench_function("n = 1,000", |b| b.iter(|| fib(black_box(1_000))));
+    g.bench_function("n = 10,000", |b| b.iter(|| fib(black_box(10_000))));
+    g.bench_function("n = 100,000", |b| b.iter(|| fib(black_box(100_000))));
+    g.bench_function("n = 1,000,000", |b| b.iter(|| fib(black_box(1_000_000))));
+    g.bench_function("n = 10,000,000", |b| b.iter(|| fib(black_box(10_000_000))));
 }
 
 fn thresholds(_c: &mut Criterion) {
@@ -23,8 +18,6 @@ fn thresholds(_c: &mut Criterion) {
     calculate_threshold(16, 1000);
     // One frame at 120 FPS
     calculate_threshold(8, 1000);
-    // One frame at 144 FPS
-    calculate_threshold(6, 1000);
     // One frame at 240 FPS
     calculate_threshold(4, 1000);
     // One millisecond
@@ -57,5 +50,5 @@ fn calculate_threshold(target_duration_ms: u64, step: u128) {
     );
 }
 
-criterion_group!(benches, basics, thresholds);
+criterion_group!(benches, criterion_benchmark, thresholds);
 criterion_main!(benches);
