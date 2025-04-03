@@ -9,7 +9,6 @@
 - Check format: `cargo fmt -- --check`
 - Lint: `cargo clippy -- -D warnings`
 - Run CLI: `cargo run --bin fib <number>`
-- Run web server: `cargo run --bin fib-web`
 - Build docs: `cargo doc --no-deps --open`
 
 ## Code Style

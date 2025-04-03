@@ -13,7 +13,6 @@ readme = "README.md"
 [features]
 default = ["cli"]
 cli = ["clap"]
-web = ["actix-web", "dotenvy", "env_logger", "serde"]
 
 [dependencies]
 # Core dependencies
@@ -22,12 +21,6 @@ num-traits = "0.2.19"
 
 # CLI dependencies
 clap = { version = "4.5.34", features = ["derive"], optional = true }
-
-# Web dependencies
-actix-web = { version = "4.10.2", optional = true }
-dotenvy = { version = "0.15.7", optional = true }
-env_logger = { version = "0.11.7", optional = true }
-serde = { version = "1.0.219", features = ["derive"], optional = true }
 
 [dev-dependencies]
 criterion = "0.5.1"
@@ -41,8 +34,3 @@ harness = false
 name = "fib"
 path = "src/bin/cli.rs"
 required-features = ["cli"]
-
-[[bin]]
-name = "fib-web"
-path = "src/bin/web.rs"
-required-features = ["web"]

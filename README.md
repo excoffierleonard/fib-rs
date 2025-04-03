@@ -12,12 +12,23 @@ A highly optimized Fibonacci number calculator for Rust that efficiently compute
 - **Handles massive inputs**: Compute Fibonacci numbers up to F(10,000,000) and beyond
 - **Automatic optimization**: Uses primitive integers for smaller inputs and BigUint for larger ones
 - **CLI application**: Simple command-line interface for quick calculations
-- **Web API**: HTTP server with JSON interface for network-based calculations
 
 ## Installation
 
+### Library
+
+To use as a dependency in your project:
+
 ```bash
 cargo add fib-rs
+```
+
+### CLI Tool
+
+To install the command-line tool:
+
+```bash
+cargo install fib-rs
 ```
 
 ## Usage
@@ -27,8 +38,8 @@ cargo add fib-rs
 ```rust
 use fib_rs::fib;
 
-// Calculate F(1000)
-let input = 1000;
+// Calculate F(100)
+let input = 100;
 let result = fib_rs::fib(input);
 println!("F({}) = {}", input, result);
 ```
@@ -36,52 +47,9 @@ println!("F({}) = {}", input, result);
 ### Command-line application
 
 ```bash
-# Install only the CLI (this is the default)
-cargo install fib-rs
-
-# Or explicitly specify the CLI feature
-cargo install fib-rs --features="cli" --no-default-features
-
 # Calculate the 100th Fibonacci number
 fib 100
 ```
-
-### Web server
-
-```bash
-# Install only the web server
-cargo install fib-rs --features="web" --no-default-features
-
-# Run the server (defaults to port 8080)
-fib-web
-
-# Or specify a custom port with an environment variable
-PORT=3000 fib-web
-```
-
-Then send a POST request:
-
-```bash
-curl --request POST \
-     --url "http://localhost:8080/fib" \
-     --header "Content-Type: application/json" \
-     --data '{"n": 100}'
-```
-
-Response:
-
-```json
-{"F":"354224848179261915075"}
-```
-
-### Installation Options
-
-The package provides these installation options:
-
-- `--features="cli"`: Install only the command-line interface (default)
-- `--features="web"`: Install only the web server
-- `--features="cli,web"`: Install both CLI and web server
-- `--no-default-features`: Disable default features (use with other feature flags)
 
 ## Performance
 
