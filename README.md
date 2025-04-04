@@ -6,6 +6,16 @@
 
 A highly optimized Fibonacci number calculator for Rust that efficiently computes arbitrarily large Fibonacci numbers.
 
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Performance](#performance)
+- [Algorithm Details](#algorithm-details)
+- [License](#license)
+- [Contributin](#contributing)
+
 ## Features
 
 - **Fast doubling algorithm**: Calculates Fibonacci numbers in O(log n) time
@@ -54,12 +64,28 @@ let results = fib_range(3..=10);
 
 ### Command-line application
 
-```bash
-# Calculate the 100th Fibonacci number
-fib single 100
+#### Single
 
-# Calculate a range of Fibonacci numbers (F(3) through F(10))
-fib range 3 10
+```bash
+fib single 100
+```
+
+```bash
+F(100) = 354224848179261915075
+```
+
+#### Range
+
+```bash
+fib range 6 10
+```
+
+```bash
+F(6) = 8
+F(7) = 13
+F(8) = 21
+F(9) = 34
+F(10) = 55
 ```
 
 ## Performance
@@ -93,6 +119,7 @@ Specifications:
 For computing a single Fibonacci number, this implementation uses the fast doubling algorithm with logarithmic time complexity:
 
 For even n: F(2k) = F(k) *(2*F(k+1) - F(k))
+
 For odd n:  F(2k+1) = F(k+1)^2 + F(k)^2
 
 This divide-and-conquer approach is vastly more efficient than naive recursive or iterative methods for large inputs.
