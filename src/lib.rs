@@ -28,15 +28,9 @@ use std::ops::RangeInclusive;
 /// use num_bigint::BigUint;
 /// use num_traits::Zero;
 ///
-/// // F(0) = 0
-/// assert_eq!(fib(0), BigUint::zero());
-///
-/// // F(10) = 55
-/// assert_eq!(fib(10), BigUint::from(55u32));
-///
-/// // Large value example (would overflow primitive types)
-/// let fib_200 = fib(200);
-/// assert!(fib_200 > BigUint::from(u128::MAX));
+/// assert_eq!(fib(0), BigUint::zero()); // F(0) = 0
+/// assert_eq!(fib(10), BigUint::from(55u32)); // F(10) = 55
+/// assert!(fib(200) > BigUint::from(u128::MAX)); // Large value example (would overflow primitive types)
 /// ```
 pub fn fib(n: u128) -> BigUint {
     match n {
@@ -81,22 +75,28 @@ fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
 ///
 /// # Returns
 ///
-/// * A `Vec<BigUint>` containing Fibonacci numbers for indices in the specified inclusive range.
+/// * A `Vec<BigUint>` containing ordered Fibonacci numbers for indices in the specified inclusive range.
+///
+/// # Complexity
+///
+/// * Time complexity: O(n) for generating Fibonacci numbers in the range.
+/// * Space complexity: O(n) for storing the Fibonacci numbers in a vector.
 ///
 /// # Examples
 ///
 /// ```
-/// use fib_rs::fib_sequence;
+/// use fib_rs::fib_range;
 /// use num_bigint::BigUint;
 /// use num_traits::{Zero, One};
 ///
 /// // Generate Fibonacci numbers from index 3 to 10 (both 3 and 10 inclusive)
-/// let fibs = fib_sequence(3..=10);
+/// let fibs = fib_range(3..=10);
+///
 /// assert_eq!(fibs.len(), 8); // indices 3 to 10
-/// // For example, F(3) should be 2:
-/// assert_eq!(fibs[0], BigUint::from(2u32));
+/// assert_eq!(fibs[0], BigUint::from(2u32)); // F(3) = 2
+/// assert_eq!(fibs[7], BigUint::from(55u32)); // F(10) = 55
 /// ```
-pub fn fib_sequence(range: RangeInclusive<u128>) -> Vec<BigUint> {
+pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
     let start = *range.start();
     let end = *range.end();
     if end < start {
