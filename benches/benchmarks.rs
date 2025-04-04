@@ -1,11 +1,13 @@
 use criterion::{Criterion, black_box, criterion_group, criterion_main};
 use fib_rs::{fib, fib_sequence};
 use num_format::ToFormattedString;
+use rayon::prelude::*;
 use std::time::{Duration, Instant};
 
 fn fib_n_benchmark(c: &mut Criterion) {
     let mut g = c.benchmark_group("F(n) Benchmarks");
     g.sample_size(10);
+
     g.bench_function("n = 1,000", |b| b.iter(|| fib(black_box(1_000))));
     g.bench_function("n = 10,000", |b| b.iter(|| fib(black_box(10_000))));
     g.bench_function("n = 100,000", |b| b.iter(|| fib(black_box(100_000))));
@@ -16,10 +18,27 @@ fn fib_n_benchmark(c: &mut Criterion) {
 fn fib_sequence_benchmark(c: &mut Criterion) {
     let mut g = c.benchmark_group("Fibonacci Sequence Benchmarks");
     g.sample_size(10);
+
     g.bench_function("n = 1,000", |b| b.iter(|| fib_sequence(black_box(1_000))));
     g.bench_function("n = 10,000", |b| b.iter(|| fib_sequence(black_box(10_000))));
     g.bench_function("n = 100,000", |b| {
         b.iter(|| fib_sequence(black_box(100_000)))
+    });
+}
+
+fn for_multiple_n_vs_sequence(c: &mut Criterion) {
+    let mut g = c.benchmark_group("Multiple Generations");
+    g.sample_size(10);
+
+    let input = 10;
+    g.bench_function("sequence", |b| b.iter(|| fib_sequence(black_box(input))));
+    g.bench_function("n", |b| {
+        b.iter(|| {
+            (0..input)
+                .into_par_iter()
+                .map(|n| fib(black_box(n)))
+                .collect::<Vec<_>>()
+        })
     });
 }
 
@@ -90,5 +109,11 @@ fn calculate_sequence_threshold(target_duration_ms: u64, step: u128) {
     );
 }
 
-criterion_group!(benches, fib_n_benchmark, fib_sequence_benchmark, thresholds);
+criterion_group!(
+    benches,
+    for_multiple_n_vs_sequence,
+    fib_n_benchmark,
+    fib_sequence_benchmark,
+    thresholds
+);
 criterion_main!(benches);

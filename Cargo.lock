@@ -252,6 +252,7 @@ dependencies = [
  "num-bigint",
  "num-format",
  "num-traits",
+ "rayon",
 ]
 
 [[package]]

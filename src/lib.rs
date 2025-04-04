@@ -116,3 +116,26 @@ pub fn fib_sequence(n: u128) -> Vec<BigUint> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rayon::prelude::*;
+
+    #[test]
+    fn test() {
+        fib_sequence(1000)
+            .iter()
+            .for_each(|num| println!("{}", num));
+    }
+
+    #[test]
+    fn test_fib() {
+        (0..1000)
+            .into_par_iter()
+            .map(|n| fib(n))
+            .collect::<Vec<_>>()
+            .iter()
+            .for_each(|num| println!("{}", num));
+    }
+}
