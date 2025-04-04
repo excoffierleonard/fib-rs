@@ -41,10 +41,9 @@ fn main() {
                 return;
             }
 
-            println!("Fibonacci numbers from F({}) to F({}):", start, end);
-            for (i, num) in results.iter().enumerate() {
-                println!("F({}) = {}", start + i as u128, num);
-            }
+            (*start..=*end)
+                .zip(results.iter())
+                .for_each(|(i, result)| println!("F({}) = {}", i, result));
         }
     }
 }

@@ -39,13 +39,17 @@ cargo install fib-rs
 use fib_rs::{fib, fib_range};
 
 // Calculate F(100)
-let input = 100;
-let result = fib(input);
-println!("F({}) = {}", input, result);
+let i = 100;
+let result = fib(i);
+// Print the result
+println!("F({}) = {}", i, result);
 
 // Calculate a range of Fibonacci numbers (F(3) through F(10))
-let range_result = fib_range(3..=10);
-println!("Fibonacci numbers from 3 to 10: {:?}", range_result);
+let results = fib_range(3..=10);
+// Print the results
+(*start..=*end)
+    .zip(results.iter())
+    .for_each(|(i, result)| println!("F({}) = {}", i, result));
 ```
 
 ### Command-line application
