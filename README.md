@@ -14,7 +14,7 @@ A highly optimized Fibonacci number calculator for Rust that efficiently compute
 - [Performance](#performance)
 - [Algorithm Details](#algorithm-details)
 - [License](#license)
-- [Contributin](#contributing)
+- [Contributing](#contributing)
 
 ## Features
 
