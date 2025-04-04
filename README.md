@@ -10,8 +10,8 @@ A highly optimized Fibonacci number calculator for Rust that efficiently compute
 
 - **Fast doubling algorithm**: Calculates Fibonacci numbers in O(log n) time
 - **Handles massive inputs**: Compute Fibonacci numbers up to F(10,000,000) and beyond
-- **Automatic optimization**: Uses primitive integers for smaller inputs and BigUint for larger ones
-- **CLI application**: Simple command-line interface for quick calculations
+- **Range calculation**: Generate sequences of consecutive Fibonacci numbers with parallel processing
+- **CLI application**: Simple command-line interface for quick calculations of single values or ranges
 
 ## Installation
 
@@ -36,29 +36,29 @@ cargo install fib-rs
 ### As a library
 
 ```rust
-use fib_rs::fib;
+use fib_rs::{fib, fib_range};
 
 // Calculate F(100)
 let input = 100;
-let result = fib_rs::fib(input);
+let result = fib(input);
 println!("F({}) = {}", input, result);
+
+// Calculate a range of Fibonacci numbers (F(3) through F(10))
+let range_result = fib_range(3..=10);
+println!("Fibonacci numbers from 3 to 10: {:?}", range_result);
 ```
 
 ### Command-line application
 
 ```bash
 # Calculate the 100th Fibonacci number
-fib 100
+fib single 100
+
+# Calculate a range of Fibonacci numbers (F(3) through F(10))
+fib range 3 10
 ```
 
 ## Performance
-
-The implementation uses a fast doubling algorithm with the following optimizations:
-
-- For n ≤ 185: Uses primitive u128 integers
-- For n > 185: Uses BigUint for arbitrary precision
-
-Benchmark results:
 
 Specifications:
 
@@ -67,22 +67,41 @@ Specifications:
 - 32GB Unified Memory
 - macOS Sequoia 15.4
 
-| Input Size | Computation Time |
-|------------|------------------|
-| F(1,000)   | ~876ns           |
-| F(10,000)  | ~8μs             |
-| F(100,000) | ~332μs           |
-| F(1,000,000)| ~10ms           |
-| F(10,000,000)| ~326ms         |
+| Single        | Computation Time |
+|---------------|------------------|
+| F(1,000)      | ~876ns           |
+| F(10,000)     | ~8μs             |
+| F(100,000)    | ~332μs           |
+| F(1,000,000)  | ~10ms            |
+| F(10,000,000) | ~326ms           |
+
+| Range                | Computation Time |
+|----------------------|------------------|
+| F(0) -> F(1,000)     | ~110μs           |
+| F(0) -> F(10,000)    | ~986μs           |
+| F(0) -> F(100,000)   | ~45ms            |
+| F(0) -> F(1,000,000) | ~33.9s           |
 
 ## Algorithm Details
 
-This implementation uses the fast doubling algorithm for Fibonacci numbers, which has logarithmic time complexity:
+### Single Fibonacci Number
+
+For computing a single Fibonacci number, this implementation uses the fast doubling algorithm with logarithmic time complexity:
 
 For even n: F(2k) = F(k) *(2*F(k+1) - F(k))
 For odd n:  F(2k+1) = F(k+1)^2 + F(k)^2
 
-This approach is vastly more efficient than naive recursive or iterative methods for large inputs.
+This divide-and-conquer approach is vastly more efficient than naive recursive or iterative methods for large inputs.
+
+### Fibonacci Range
+
+The range implementation combines two approaches for optimal performance:
+
+1. **Parallel processing**: Divides the requested range into optimal chunks based on available CPU threads
+2. **Smart initialization**: Uses the fast doubling algorithm to efficiently find the starting values for each chunk
+3. **Iterative calculation**: After finding starting values, computes subsequent Fibonacci numbers iteratively within each chunk
+
+This hybrid approach provides excellent performance for generating sequences of consecutive Fibonacci numbers, especially for large ranges, by leveraging multi-core processing while maintaining mathematical efficiency.
 
 ## License
 

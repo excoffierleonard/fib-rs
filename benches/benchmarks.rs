@@ -30,6 +30,9 @@ fn fib_sequence_benchmark(c: &mut Criterion) {
     g.bench_function("100,000-101,000", |b| {
         b.iter(|| fib_range(black_box(100_000..=101_000)))
     });
+    // g.bench_function("0-1,000,000", |b| {
+    //     b.iter(|| fib_range(black_box(0..=1_000_000)))
+    // });
 }
 
 criterion_group!(benches, fib_n_benchmark, fib_sequence_benchmark);
