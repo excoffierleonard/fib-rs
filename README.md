@@ -55,9 +55,10 @@ let result = fib(i);
 println!("F({}) = {}", i, result);
 
 // Calculate a range of Fibonacci numbers (F(3) through F(10))
-let results = fib_range(3..=10);
+let range = 3..=10;
+let results = fib_range(range.clone());
 // Print the results
-(*start..=*end)
+range
     .zip(results.iter())
     .for_each(|(i, result)| println!("F({}) = {}", i, result));
 ```

@@ -34,14 +34,14 @@ fn main() {
         }
         Commands::Range { start, end } => {
             let range = *start..=*end;
-            let results = fib_range(range);
+            let results = fib_range(range.clone());
 
             if results.is_empty() {
                 eprintln!("Invalid range: end < start");
                 return;
             }
 
-            (*start..=*end)
+            range
                 .zip(results.iter())
                 .for_each(|(i, result)| println!("F({}) = {}", i, result));
         }
