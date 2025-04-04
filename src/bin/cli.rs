@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand};
 use fib_rs::{fib, fib_range};
 
 #[derive(Parser)]
+#[command(version)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
