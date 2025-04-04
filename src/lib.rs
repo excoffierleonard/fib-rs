@@ -1,6 +1,6 @@
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
-use std::mem;
+use std::ops::RangeInclusive;
 
 /// Calculate the nth Fibonacci number using an optimized fast doubling algorithm.
 ///
@@ -71,20 +71,16 @@ fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
     }
 }
 
-/// Generates all Fibonacci numbers up to the nth index.
+/// Generates Fibonacci numbers for indices in the given inclusive range.
 ///
 /// # Arguments
 ///
-/// * `n` - The maximum index for the Fibonacci sequence (inclusive).
+/// * `range` - A range of indices (x..=y) for which to generate Fibonacci numbers.
+///             The sequence will include the Fibonacci numbers at both indices x and y.
 ///
 /// # Returns
 ///
-/// * A `Vec<BigUint>` containing F(0), F(1), ..., F(n).
-///
-/// # Complexity
-///
-/// * Time complexity: O(n) (assuming BigUint addition is roughly constant time)
-/// * Space complexity: O(n) to store the results
+/// * A `Vec<BigUint>` containing Fibonacci numbers for indices in the specified inclusive range.
 ///
 /// # Examples
 ///
@@ -93,49 +89,30 @@ fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
 /// use num_bigint::BigUint;
 /// use num_traits::{Zero, One};
 ///
-/// // Generate Fibonacci numbers up to the 10th index
-/// let fibs = fib_sequence(10);
-/// assert_eq!(fibs.len(), 11); // F(0) to F(10)
-/// assert_eq!(fibs[0], BigUint::zero());
-/// assert_eq!(fibs[1], BigUint::one());
-/// assert_eq!(fibs[10], BigUint::from(55u32));
+/// // Generate Fibonacci numbers from index 3 to 10 (both 3 and 10 inclusive)
+/// let fibs = fib_sequence(3..=10);
+/// assert_eq!(fibs.len(), 8); // indices 3 to 10
+/// // For example, F(3) should be 2:
+/// assert_eq!(fibs[0], BigUint::from(2u32));
 /// ```
-pub fn fib_sequence(n: u128) -> Vec<BigUint> {
-    match n {
-        0 => vec![BigUint::zero()],
-        _ => {
-            let mut result = Vec::with_capacity(n as usize + 1);
-            let (mut a, mut b) = (BigUint::zero(), BigUint::one());
-            result.push(a.clone());
-            for _ in 0..n {
-                result.push(b.clone());
-                let next = a + &b;
-                a = mem::replace(&mut b, next);
-            }
-            result
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use rayon::prelude::*;
-
-    #[test]
-    fn test() {
-        fib_sequence(1000)
-            .iter()
-            .for_each(|num| println!("{}", num));
+pub fn fib_sequence(range: RangeInclusive<u128>) -> Vec<BigUint> {
+    let &start = range.start();
+    let &end = range.end();
+    if end < start {
+        return vec![];
     }
 
-    #[test]
-    fn test_fib() {
-        (0..1000)
-            .into_par_iter()
-            .map(|n| fib(n))
-            .collect::<Vec<_>>()
-            .iter()
-            .for_each(|num| println!("{}", num));
+    let capacity = (end - start + 1) as usize;
+    let mut result = Vec::with_capacity(capacity);
+
+    // Get Fibonacci numbers at positions `start` and `start + 1` using the fast doubling helper.
+    let (mut a, mut b) = fib_fast_doubling_helper(start);
+
+    for _ in start..=end {
+        result.push(a.clone());
+        let next = a + &b;
+        a = b;
+        b = next;
     }
+    result
 }
