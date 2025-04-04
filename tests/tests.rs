@@ -47,6 +47,16 @@ fn correct_sequence_generation() {
     );
 }
 
+#[test]
+fn ordering_check() {
+    // Check that the Fibonacci sequence is strictly increasing
+    let fib_seq = fib_sequence(0..=100);
+    // Start from the third element since the first three results are 0, 1, 1
+    for i in 3..fib_seq.len() {
+        assert!(fib_seq[i] > fib_seq[i - 1]);
+    }
+}
+
 // Loop over all the Fibonacci numbers from 0 to 256 (u8+1) to ensure the function works with a variety of numbers
 #[test]
 fn loop_over_fibonacci() {
