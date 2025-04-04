@@ -1,5 +1,6 @@
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
+use std::mem;
 
 /// Calculate the nth Fibonacci number using an optimized fast doubling algorithm.
 ///
@@ -13,11 +14,6 @@ use num_traits::{One, Zero};
 /// # Returns
 ///
 /// * The nth Fibonacci number as a `BigUint`
-///
-/// # Performance
-///
-/// * For n ≤ 185: Uses primitive u128 arithmetic for maximum performance
-/// * For n > 185: Automatically switches to arbitrary precision with BigUint
 ///
 /// # Complexity
 ///
@@ -71,6 +67,52 @@ fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
                     (f2k1, f2k2)
                 }
             }
+        }
+    }
+}
+
+/// Generates all Fibonacci numbers up to the nth index.
+///
+/// # Arguments
+///
+/// * `n` - The maximum index for the Fibonacci sequence (inclusive).
+///
+/// # Returns
+///
+/// * A `Vec<BigUint>` containing F(0), F(1), ..., F(n).
+///
+/// # Complexity
+///
+/// * Time complexity: O(n) (assuming BigUint addition is roughly constant time)
+/// * Space complexity: O(n) to store the results
+///
+/// # Examples
+///
+/// ```
+/// use fib_rs::fib_sequence;
+/// use num_bigint::BigUint;
+/// use num_traits::{Zero, One};
+///
+/// // Generate Fibonacci numbers up to the 10th index
+/// let fibs = fib_sequence(10);
+/// assert_eq!(fibs.len(), 11); // F(0) to F(10)
+/// assert_eq!(fibs[0], BigUint::zero());
+/// assert_eq!(fibs[1], BigUint::one());
+/// assert_eq!(fibs[10], BigUint::from(55u32));
+/// ```
+pub fn fib_sequence(n: u128) -> Vec<BigUint> {
+    match n {
+        0 => vec![BigUint::zero()],
+        _ => {
+            let mut result = Vec::with_capacity(n as usize + 1);
+            let (mut a, mut b) = (BigUint::zero(), BigUint::one());
+            result.push(a.clone());
+            for _ in 0..n {
+                result.push(b.clone());
+                let next = a + &b;
+                a = mem::replace(&mut b, next);
+            }
+            result
         }
     }
 }
