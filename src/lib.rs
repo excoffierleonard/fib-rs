@@ -131,7 +131,7 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
             // Compute the rest of the chunk iteratively
             for _ in chunk_start..=chunk_end {
                 chunk_result.push(a.clone());
-                let next = a.clone() + &b;
+                let next = a + &b;
                 a = b;
                 b = next;
             }
