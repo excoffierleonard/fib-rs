@@ -110,7 +110,7 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
     let chunk_size = std::cmp::max(1, total_count / num_threads);
 
     // More efficient chunk creation
-    let num_chunks = (total_count + chunk_size - 1) / chunk_size; // Ceiling division
+    let num_chunks = total_count.div_ceil(chunk_size); // Ceiling division
     let chunks: Vec<_> = (0..num_chunks)
         .map(|i| {
             let chunk_start = start + (i as u128) * (chunk_size as u128);
