@@ -1,7 +1,12 @@
+use std::{
+    cmp::{max, min},
+    mem::replace,
+    ops::RangeInclusive,
+};
+
 use num_bigint::BigUint;
 use num_traits::{One, Zero};
-use rayon::prelude::*;
-use std::ops::RangeInclusive;
+use rayon::{current_num_threads, prelude::*};
 
 /// Type alias for the result of the fast doubling algorithm
 type FibPair = (BigUint, BigUint);
@@ -107,8 +112,8 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
     let total_count = (end - start + 1) as usize;
 
     // Determine chunk size for parallelization
-    let num_threads = rayon::current_num_threads();
-    let chunk_size = std::cmp::max(1, total_count / num_threads);
+    let num_threads = current_num_threads();
+    let chunk_size = max(1, total_count / num_threads);
 
     // Calculate number of chunks with ceiling division
     let num_chunks = total_count.div_ceil(chunk_size);
@@ -117,7 +122,7 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
     let chunks: Vec<_> = (0..num_chunks)
         .map(|i| {
             let chunk_start = start + (i as u128) * (chunk_size as u128);
-            let chunk_end = std::cmp::min(chunk_start + (chunk_size as u128) - 1, end);
+            let chunk_end = min(chunk_start + (chunk_size as u128) - 1, end);
             (chunk_start, chunk_end)
         })
         .collect();
@@ -138,7 +143,7 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
             // Compute the rest of the chunk iteratively
             for _ in 1..chunk_size {
                 let next = &a + &b;
-                a = std::mem::replace(&mut b, next);
+                a = replace(&mut b, next);
                 result.push(a.clone());
             }
 
