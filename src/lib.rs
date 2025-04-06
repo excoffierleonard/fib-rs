@@ -105,14 +105,15 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
 
     let total_count = (end - start + 1) as usize;
 
-    // Determine chunk size based on available parallelism
+    // Determine chunk size for parallelization
     let num_threads = rayon::current_num_threads();
     let chunk_size = std::cmp::max(1, total_count / num_threads);
 
-    // Divide the range into chunks
-    let chunks: Vec<_> = (start..=end)
-        .step_by(chunk_size)
-        .map(|chunk_start| {
+    // More efficient chunk creation
+    let num_chunks = (total_count + chunk_size - 1) / chunk_size; // Ceiling division
+    let chunks: Vec<_> = (0..num_chunks)
+        .map(|i| {
+            let chunk_start = start + (i as u128) * (chunk_size as u128);
             let chunk_end = std::cmp::min(chunk_start + (chunk_size as u128) - 1, end);
             (chunk_start, chunk_end)
         })
@@ -120,26 +121,34 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
 
     // Process each chunk in parallel
     let results: Vec<Vec<BigUint>> = chunks
-        .into_par_iter()
-        .map(|(chunk_start, chunk_end)| {
+        .par_iter()
+        .map(|&(chunk_start, chunk_end)| {
             let chunk_size = (chunk_end - chunk_start + 1) as usize;
             let mut chunk_result = Vec::with_capacity(chunk_size);
 
             // Get starting Fibonacci numbers for this chunk
             let (mut a, mut b) = fib_fast_doubling_helper(chunk_start);
 
-            // Compute the rest of the chunk iteratively
-            for _ in chunk_start..=chunk_end {
-                chunk_result.push(a.clone());
+            // Add the first value
+            chunk_result.push(a.clone());
+
+            // Compute the rest of the chunk iteratively - fixed loop
+            // Inside the iterative calculation
+            for _ in 1..chunk_size {
                 let next = a + &b;
-                a = b;
-                b = next;
+                a = std::mem::replace(&mut b, next);
+                chunk_result.push(a.clone());
             }
 
             chunk_result
         })
         .collect();
 
-    // Flatten the results into a single vector
-    results.into_iter().flatten().collect()
+    // Preallocate the result vector for more efficient flattening
+    let mut result = Vec::with_capacity(total_count);
+    for chunk in results {
+        result.extend(chunk);
+    }
+
+    result
 }
