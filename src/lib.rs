@@ -3,6 +3,9 @@ use num_traits::{One, Zero};
 use rayon::prelude::*;
 use std::ops::RangeInclusive;
 
+/// Type alias for the result of the fast doubling algorithm
+type FibPair = (BigUint, BigUint);
+
 /// Calculate the nth Fibonacci number using an optimized fast doubling algorithm.
 ///
 /// This function efficiently computes Fibonacci numbers of arbitrary size by using
@@ -40,29 +43,26 @@ pub fn fib(n: u128) -> BigUint {
     }
 }
 
-fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
-    match n {
-        0 => (Zero::zero(), One::one()),
-        _ => {
-            let (fk, fk1) = fib_fast_doubling_helper(n / 2);
+fn fib_fast_doubling_helper(n: u128) -> FibPair {
+    if n == 0 {
+        return (BigUint::zero(), BigUint::one());
+    }
 
-            let two_fk1 = &fk1 << 1;
-            // Assuming standard Fibonacci sequence where F(k) <= 2*F(k+1)
-            let term = two_fk1 - &fk;
-            let f2k = &fk * term;
+    // Calculate F(k) and F(k+1) where k = floor(n/2)
+    let (fk, fk1) = fib_fast_doubling_helper(n / 2);
 
-            let fk_squared = &fk * &fk;
-            let fk1_squared = &fk1 * &fk1;
-            let f2k1 = fk_squared + fk1_squared;
+    // Calculate F(2k) and F(2k+1)
+    let two_fk1 = &fk1 << 1;
+    let term = &two_fk1 - &fk;
+    let f2k = &fk * &term;
+    let f2k1 = &fk * &fk + &fk1 * &fk1;
 
-            match n % 2 {
-                0 => (f2k, f2k1),
-                _ => {
-                    let f2k2 = &f2k1 + &f2k;
-                    (f2k1, f2k2)
-                }
-            }
-        }
+    // Return appropriate pair based on whether n is even or odd
+    if n % 2 == 0 {
+        (f2k, f2k1)
+    } else {
+        let f2k2 = &f2k1 + &f2k;
+        (f2k1, f2k2)
     }
 }
 
@@ -99,8 +99,9 @@ fn fib_fast_doubling_helper(n: u128) -> (BigUint, BigUint) {
 pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
     let start = *range.start();
     let end = *range.end();
+
     if end < start {
-        return vec![];
+        return Vec::new();
     }
 
     let total_count = (end - start + 1) as usize;
@@ -109,8 +110,10 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
     let num_threads = rayon::current_num_threads();
     let chunk_size = std::cmp::max(1, total_count / num_threads);
 
-    // More efficient chunk creation
-    let num_chunks = total_count.div_ceil(chunk_size); // Ceiling division
+    // Calculate number of chunks with ceiling division
+    let num_chunks = total_count.div_ceil(chunk_size);
+
+    // Create chunk boundaries
     let chunks: Vec<_> = (0..num_chunks)
         .map(|i| {
             let chunk_start = start + (i as u128) * (chunk_size as u128);
@@ -124,27 +127,26 @@ pub fn fib_range(range: RangeInclusive<u128>) -> Vec<BigUint> {
         .par_iter()
         .map(|&(chunk_start, chunk_end)| {
             let chunk_size = (chunk_end - chunk_start + 1) as usize;
-            let mut chunk_result = Vec::with_capacity(chunk_size);
+            let mut result = Vec::with_capacity(chunk_size);
 
             // Get starting Fibonacci numbers for this chunk
             let (mut a, mut b) = fib_fast_doubling_helper(chunk_start);
 
             // Add the first value
-            chunk_result.push(a.clone());
+            result.push(a.clone());
 
-            // Compute the rest of the chunk iteratively - fixed loop
-            // Inside the iterative calculation
+            // Compute the rest of the chunk iteratively
             for _ in 1..chunk_size {
-                let next = a + &b;
+                let next = &a + &b;
                 a = std::mem::replace(&mut b, next);
-                chunk_result.push(a.clone());
+                result.push(a.clone());
             }
 
-            chunk_result
+            result
         })
         .collect();
 
-    // Preallocate the result vector for more efficient flattening
+    // Combine results efficiently
     let mut result = Vec::with_capacity(total_count);
     for chunk in results {
         result.extend(chunk);
