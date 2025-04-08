@@ -30,7 +30,7 @@ A highly optimized Fibonacci number calculator for Rust that efficiently compute
 To use as a dependency in your project:
 
 ```bash
-cargo add fib-rs
+cargo add fib-rs --no-default-features
 ```
 
 ### CLI Tool
