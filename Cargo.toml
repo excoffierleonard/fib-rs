@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "0.3.4"
+version = "0.3.5"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
@@ -13,6 +13,9 @@ readme = "README.md"
 [features]
 default = []
 cli = ["clap"]
+
+[package.metadata.cargo-install]
+install-features = ["cli"]
 
 [dependencies]
 # Core dependencies
