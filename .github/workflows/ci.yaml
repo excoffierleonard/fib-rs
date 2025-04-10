@@ -20,7 +20,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --workspace --all-features --all-targets -- --check
+          args: --all -- --check
 
   lint:
     name: Lint
