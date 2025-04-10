@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "0.3.6"
+version = "0.3.7"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
@@ -16,7 +16,7 @@ cli = ["clap"]
 
 [dependencies]
 # Core dependencies
-num-bigint = "0.4.7"
+num-bigint = "0.4.6"
 num-traits = "0.2.19"
 rayon = "1.10.0"
 
