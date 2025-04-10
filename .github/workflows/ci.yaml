@@ -111,4 +111,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: publish
-          args: -p parser-core --dry-run
+          args: --dry-run
