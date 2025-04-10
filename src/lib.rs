@@ -76,7 +76,7 @@ fn fib_fast_doubling_helper(n: u128) -> FibPair {
 /// # Arguments
 ///
 /// * `range` - A range of indices (x..=y) for which to generate Fibonacci numbers.
-///             The sequence will include the Fibonacci numbers at both indices x and y.
+///   The sequence will include the Fibonacci numbers at both indices x and y.
 ///
 /// # Returns
 ///
