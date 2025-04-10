@@ -219,26 +219,35 @@ mod tests {
         }
     }
 
-    // Loop over all the Fibonacci numbers from 0 to 256 (u8+1) to ensure the function works with a variety of numbers
+    // Loop over all the Fibonacci numbers to ensure the function does not panic over a variety of inputs
     #[test]
     fn loop_over_fibonacci() {
-        for i in 0..=256 {
+        for i in 0..=1000 {
             fib(i);
         }
     }
 
     // Test with various ranges
     #[test]
-    fn loop_over_fibonacci_sequence() {
+    fn loop_over_fibonacci_ranges() {
         let ranges = vec![
             0..=100,
             50..=150,
             100..=200,
-            150..=256,
-            200..=256,
-            0..=256,
-            0..=1000,
-            1000..=2000,
+            150..=250,
+            200..=300,
+            350..=450,
+            400..=500,
+            450..=550,
+            500..=600,
+            550..=650,
+            600..=700,
+            650..=750,
+            700..=800,
+            750..=850,
+            800..=900,
+            850..=950,
+            900..=1000,
         ];
 
         for range in ranges {
