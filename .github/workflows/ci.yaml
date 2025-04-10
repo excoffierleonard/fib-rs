@@ -5,16 +5,25 @@ permissions:
 
 on:
   pull_request:
-    branches: [dev, main]
+    branches: [main]
   push:
-    branches: [dev, main]
+    branches: [main]
 
 jobs:
-  format:
-    name: Format
+  code-quality-checks:
+    name: Code Quality Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache Rust toolchain and dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.rustup
+            ~/.cargo
+            target
+          key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
 
       - name: Format
         uses: actions-rs/cargo@v1
@@ -22,29 +31,14 @@ jobs:
           command: fmt
           args: --all -- --check
 
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Rust toolchain and dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.rustup
-            ~/.cargo
-            target
-          key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
-
       - name: Lint
         uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: --workspace --all-features --all-targets -- -D warnings
 
-  build:
-    name: Build
+  code-correctness-checks:
+    name: Code Correctness Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,36 +51,27 @@ jobs:
             ~/.cargo
             target
           key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
+
+      - name: Check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --workspace --all-features --all-targets
 
       - name: Build
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Rust toolchain and dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.rustup
-            ~/.cargo
-            target
-          key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
-
+          args: --workspace --all-features --all-targets
+    
       - name: Test
         uses: actions-rs/cargo@v1
         with:
           command: test
           args: --workspace --all-features --all-targets
 
-  doc:
-    name: Doc
+  pre-publishing-checks:
+    name: Pre-publishing Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -100,26 +85,11 @@ jobs:
             target
           key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
 
-      - name: Doc
+      - name: Verify Documentation
         uses: actions-rs/cargo@v1
         with:
           command: doc
           args: --no-deps --all-features --document-private-items
-
-  pre-publish-crates:
-    name: Pre publish Checks for Crates.io
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Rust toolchain and dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.rustup
-            ~/.cargo
-            target
-          key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
 
       - name: Verify Package
         uses: actions-rs/cargo@v1
