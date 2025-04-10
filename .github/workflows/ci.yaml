@@ -58,7 +58,7 @@ jobs:
             target
           key: ${{ runner.os }}-rust-${{ hashFiles('.github/workflows/**.yaml') }}
 
-      - name: Lint
+      - name: Build
         uses: actions-rs/cargo@v1
         with:
           command: build
