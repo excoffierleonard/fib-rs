@@ -17,18 +17,18 @@ fn fib_sequence_benchmark(c: &mut Criterion) {
     g.sample_size(10);
 
     g.bench_function("0-1,000", |b| b.iter(|| fib_range(black_box(0..=1_000))));
-    g.bench_function("1,000-2,000", |b| {
-        b.iter(|| fib_range(black_box(1_000..=2_000)))
-    });
-    g.bench_function("3,000-5,000", |b| {
-        b.iter(|| fib_range(black_box(3_000..=5_000)))
-    });
     g.bench_function("0-10,000", |b| b.iter(|| fib_range(black_box(0..=10_000))));
     g.bench_function("0-100,000", |b| {
         b.iter(|| fib_range(black_box(0..=100_000)))
     });
-    g.bench_function("100,000-101,000", |b| {
-        b.iter(|| fib_range(black_box(100_000..=101_000)))
+    g.bench_function("1,000-2,000", |b| {
+        b.iter(|| fib_range(black_box(1_000..=2_000)))
+    });
+    g.bench_function("10,000-20,000", |b| {
+        b.iter(|| fib_range(black_box(10_000..=20_000)))
+    });
+    g.bench_function("100,000-200,000", |b| {
+        b.iter(|| fib_range(black_box(100_000..=200_000)))
     });
 }
 
