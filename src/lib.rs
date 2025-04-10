@@ -48,6 +48,7 @@ pub fn fib(n: u128) -> BigUint {
     }
 }
 
+/// Helper function for the fast doubling algorithm.
 fn fib_fast_doubling_helper(n: u128) -> FibPair {
     if n == 0 {
         return (BigUint::zero(), BigUint::one());
