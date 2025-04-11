@@ -96,13 +96,9 @@ jobs:
           command: doc
           args: --no-deps --all-features --document-private-items
 
-      - name: Verify Package
-        uses: actions-rs/cargo@v1
-        with:
-          command: package
-          args: --workspace --all-features 
+      - name: Run package checks script (cargo package and version checks)
+        run: ./scripts/package-checks.sh
 
-      # TODO: Find way to fail when version already exists on crates.io
       - name: Dry run publish for core crate
         uses: actions-rs/cargo@v1
         with:
