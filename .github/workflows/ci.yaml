@@ -23,7 +23,7 @@ jobs:
             ~/.rustup
             ~/.cargo
             target
-          key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-rust
 
       - name: Format
         uses: actions-rs/cargo@v1
@@ -53,8 +53,10 @@ jobs:
           path: |
             ~/.rustup
             ~/.cargo
+            %USERPROFILE%\.rustup
+            %USERPROFILE%\.cargo
             target
-          key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-rust
 
       - name: Check
         uses: actions-rs/cargo@v1
@@ -88,7 +90,7 @@ jobs:
             ~/.rustup
             ~/.cargo
             target
-          key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-rust
 
       - name: Verify Documentation
         uses: actions-rs/cargo@v1
@@ -96,15 +98,11 @@ jobs:
           command: doc
           args: --no-deps --all-features --document-private-items
 
-      - name: Verify Package
-        uses: actions-rs/cargo@v1
-        with:
-          command: package
-          args: --workspace --all-features 
+      - name: Run package checks script (cargo package and version checks)
+        run: ./scripts/package-checks.sh
 
-      # TODO: Find way to fail when version already exists on crates.io
       - name: Dry run publish for core crate
         uses: actions-rs/cargo@v1
         with:
           command: publish
-          args: --dry-run 
+          args: --dry-run
