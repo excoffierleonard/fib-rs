@@ -1,8 +1,13 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # fib-rs Development Guidelines
 
 ## Commands
 
 - Build: `cargo build`
+- Build web demo: `trunk build --release --features="web"`
 - Run tests: `cargo test`
 - Run single test: `cargo test <test_name>` (e.g., `cargo test correct_formula`)
 - Run benchmarks: `cargo bench`
