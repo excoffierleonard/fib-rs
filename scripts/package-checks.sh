@@ -20,8 +20,8 @@ fi
 
 echo "Latest published version: $LATEST_VERSION"
 
-# Compare the versions
-if ! [[ "$LOCAL_VERSION" > "$LATEST_VERSION" ]]; then
+# Compare the versions using sort -V for correct semantic version comparison
+if [ "$(echo -e "$LOCAL_VERSION\n$LATEST_VERSION" | sort -V | tail -n1)" != "$LOCAL_VERSION" ]; then
     echo "ERROR: Local version $LOCAL_VERSION is not greater than the latest published version $LATEST_VERSION"
     echo "Please update the version in Cargo.toml"
     exit 1

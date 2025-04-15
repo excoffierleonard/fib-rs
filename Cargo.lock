@@ -545,7 +545,7 @@ dependencies = [
 
 [[package]]
 name = "fib-rs"
-version = "0.3.9"
+version = "0.3.10"
 dependencies = [
  "assert_cmd",
  "clap",
