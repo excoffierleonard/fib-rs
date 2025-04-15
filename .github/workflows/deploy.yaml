@@ -2,7 +2,7 @@ name: Release to Github Pages
 
 on:
   push:
-    branches: [dev]
+    branches: [main]
 
 permissions:
   contents: write
