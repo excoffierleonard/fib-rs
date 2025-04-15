@@ -5,6 +5,7 @@ on:
     branches: [dev]
 
 permissions:
+  contents: write
   pages: write
   id-token: write
 
@@ -48,6 +49,7 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           path: './dist'
+
 
       - name: Deploy to GitHub Pages 🚀
         id: deployment
