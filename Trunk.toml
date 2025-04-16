@@ -1,10 +1,10 @@
 [build]
-target = "assets/index.html"
+target = "index.html"
 dist = "dist"
 features = "web"
 
 [watch]
-watch = ["src", "assets"]
+watch = ["src", "index.html"]
 
 [serve]
 port = 8080
