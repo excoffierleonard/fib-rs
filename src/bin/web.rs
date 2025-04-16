@@ -9,7 +9,7 @@ fn main() {
 
 #[component]
 fn App() -> impl IntoView {
-    let (value, set_value) = signal(Ok(0));
+    let (value, set_value) = signal(Ok(0u128));
     let (result, set_result) = signal(String::new());
 
     let calculate = move |_| match value.get() {
