@@ -9,7 +9,7 @@ fn main() {
 
 #[component]
 fn App() -> impl IntoView {
-    let (value, set_value) = signal(Ok(0));
+    let (value, set_value) = signal(Ok(0u128));
     let (result, set_result) = signal(String::new());
 
     let calculate = move |_| match value.get() {
@@ -26,7 +26,7 @@ fn App() -> impl IntoView {
                 on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
             />
             <button on:click=calculate>"Calculate"</button>
-            <p style="white-space: pre-wrap; word-wrap: break-word;">{result}</p>
+            <p style="overflow-wrap: break-word;">{result}</p>
         </div>
     }
 }
