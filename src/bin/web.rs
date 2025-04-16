@@ -26,7 +26,7 @@ fn App() -> impl IntoView {
                 on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
             />
             <button on:click=calculate>"Calculate"</button>
-            <p style="white-space: pre-wrap; word-wrap: break-word;">{result}</p>
+            <p style="overflow-wrap: break-word;">{result}</p>
         </div>
     }
 }
