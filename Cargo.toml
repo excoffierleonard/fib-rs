@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "0.3.11"
+version = "0.3.12"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
