@@ -4,7 +4,7 @@ dist = "dist"
 features = "web"
 
 [watch]
-watch = ["src", "index.html", "assets"]
+watch = ["src", "index.html", "style"]
 
 [serve]
 port = 8080
