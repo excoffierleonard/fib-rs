@@ -19,7 +19,7 @@ body {
   min-height: 100vh;
 }
 
-div {
+.app-container {
   background-color: white;
   border-radius: 1rem;
   box-shadow: var(--shadow);
@@ -71,7 +71,7 @@ p {
 }
 
 @media (max-width: 600px) {
-  div {
+  .app-container {
     padding: 1rem;
   }
 
