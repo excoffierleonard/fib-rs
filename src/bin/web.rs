@@ -59,6 +59,7 @@ fn Single(set_result: WriteSignal<String>) -> impl IntoView {
 
     view! {
         <input
+            class="number-input"
             type="number"
             placeholder="Enter a number"
             on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
@@ -84,6 +85,7 @@ fn Range(set_result: WriteSignal<String>) -> impl IntoView {
     view! {
         <div style="display: flex; gap: 1rem;">
             <input
+                class="number-input"
                 type="number"
                 placeholder="Start"
                 on:input:target=move |ev| {
@@ -91,6 +93,7 @@ fn Range(set_result: WriteSignal<String>) -> impl IntoView {
                 }
             />
             <input
+                class="number-input"
                 type="number"
                 placeholder="End"
                 on:input:target=move |ev| {
@@ -98,6 +101,6 @@ fn Range(set_result: WriteSignal<String>) -> impl IntoView {
                 }
             />
         </div>
-        <button on:click=calculate>"Calculate Range"</button>
+        <button on:click=calculate>"Calculate"</button>
     }
 }
