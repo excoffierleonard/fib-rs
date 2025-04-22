@@ -14,29 +14,29 @@ fn App() -> impl IntoView {
         toggle,
         value,
         set_value: _,
-    } = use_toggle(false);
+    } = use_toggle(true);
 
     // Shared state for the result
     let (result, set_result) = signal(String::new());
 
     // The calculator component that will be displayed based on the toggle state
     let calculator = move || match value.get() {
-        true => view! { <Range set_result=set_result /> }.into_any(),
-        false => view! { <Single set_result=set_result /> }.into_any(),
+        false => view! { <Range set_result=set_result /> }.into_any(),
+        true => view! { <Single set_result=set_result /> }.into_any(),
     };
 
     // Classes for the toggle button
     let single_class = move || match value.get() {
-        false => "toggle-active",
-        true => "",
-    };
-    let range_class = move || match value.get() {
         true => "toggle-active",
         false => "",
     };
+    let range_class = move || match value.get() {
+        false => "toggle-active",
+        true => "",
+    };
     let thumb_class = move || match value.get() {
-        true => "toggle-thumb toggle-thumb-right",
-        false => "toggle-thumb toggle-thumb-left",
+        false => "toggle-thumb toggle-thumb-right",
+        true => "toggle-thumb toggle-thumb-left",
     };
 
     view! {
