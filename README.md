@@ -49,19 +49,20 @@ cargo install fib-rs
 ### As a library
 
 ```rust
-use fib_rs::{fib, fib_range};
+use fib_rs::Fib;
 
 // Calculate F(100)
 let i = 100;
-let result = fib(i);
+let result = Fib::single(i);
 // Print the result
 println!("F({}) = {}", i, result);
 
 // Calculate a range of Fibonacci numbers (F(3) through F(10))
-let range = 3..=10;
-let results = fib_range(range.clone());
+let start = 3;
+let end = 10;
+let results = Fib::range(start, end);
 // Print the results
-range
+(start..=end)
     .zip(results.iter())
     .for_each(|(i, result)| println!("F({}) = {}", i, result));
 ```
