@@ -55,6 +55,7 @@ fn App() -> impl IntoView {
 #[component]
 fn Single(set_result: WriteSignal<String>) -> impl IntoView {
     let (value, set_value) = signal(Ok(0u128));
+
     let calculate = move |_| match value.get() {
         Ok(n) => set_result.set(format!("F({}) = {}", n, Fib::single(n))),
         Err(_) => set_result.set("Please enter a valid number".to_string()),
@@ -73,16 +74,18 @@ fn Single(set_result: WriteSignal<String>) -> impl IntoView {
 
 #[component]
 fn Range(set_result: WriteSignal<String>) -> impl IntoView {
-    let (start, set_start) = signal(0u128);
-    let (end, set_end) = signal(0u128);
+    let (start, set_start) = signal(Ok(0u128));
+    let (end, set_end) = signal(Ok(0u128));
 
-    let calculate = move |_| {
-        if start.get() > end.get() {
-            set_result.set("Invalid range: end < start".to_string());
-        } else {
-            let results = Fib::range(start.get(), end.get());
-            set_result.set(format!("{:?}", results));
+    let calculate = move |_| match (start.get(), end.get()) {
+        (Ok(start), Ok(end)) => {
+            if start > end {
+                set_result.set("Invalid range: end < start".to_string());
+            } else {
+                set_result.set(format!("{:?}", Fib::range(start, end)));
+            }
         }
+        _ => set_result.set("Invalid input(s).".to_string()),
     };
 
     view! {
@@ -91,17 +94,13 @@ fn Range(set_result: WriteSignal<String>) -> impl IntoView {
                 class="number-input"
                 type="number"
                 placeholder="Start"
-                on:input:target=move |ev| {
-                    set_start.set(ev.target().value().parse::<u128>().unwrap_or(0))
-                }
+                on:input:target=move |ev| { set_start.set(ev.target().value().parse::<u128>()) }
             />
             <input
                 class="number-input"
                 type="number"
                 placeholder="End"
-                on:input:target=move |ev| {
-                    set_end.set(ev.target().value().parse::<u128>().unwrap_or(0))
-                }
+                on:input:target=move |ev| { set_end.set(ev.target().value().parse::<u128>()) }
             />
         </div>
         <button on:click=calculate>"Calculate"</button>
