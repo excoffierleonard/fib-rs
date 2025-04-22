@@ -20,29 +20,30 @@ fn App() -> impl IntoView {
         false => view! { <Single set_result=set_result /> }.into_any(),
     };
 
+    let single_class = move || match is_range.get() {
+        false => "toggle-active",
+        true => "",
+    };
+    let range_class = move || match is_range.get() {
+        true => "toggle-active",
+        false => "",
+    };
+    let thumb_class = move || match is_range.get() {
+        true => "toggle-thumb toggle-thumb-right",
+        false => "toggle-thumb toggle-thumb-left",
+    };
+
     view! {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                <span class=move || match is_range.get() {
-                    false => "toggle-active",
-                    true => "",
-                }>"Single"</span>
+                <span class=single_class>"Single"</span>
                 <button class="toggle-button" on:click=move |_| toggle()>
-                    <div class=move || {
-                        match is_range.get() {
-                            true => "toggle-thumb toggle-thumb-right",
-                            false => "toggle-thumb toggle-thumb-left",
-                        }
-                    }></div>
+                    <div class=thumb_class></div>
                 </button>
-                <span class=move || match is_range.get() {
-                    true => "toggle-active",
-                    false => "",
-                }>"Range"</span>
+                <span class=range_class>"Range"</span>
             </div>
             <div>{calculator}</div>
-            // Only show result here:
             <p class=".result-container">{result}</p>
         </div>
     }
