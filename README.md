@@ -52,10 +52,10 @@ cargo install fib-rs
 use fib_rs::Fib;
 
 // Calculate F(100)
-let i = 100;
-let result = Fib::single(i);
+let n = 100;
+let result = Fib::single(n);
 // Print the result
-println!("F({}) = {}", i, result);
+println!("F({}) = {}", n, result);
 
 // Calculate a range of Fibonacci numbers (F(3) through F(10))
 let start = 3;
