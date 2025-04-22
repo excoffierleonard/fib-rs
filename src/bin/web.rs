@@ -1,4 +1,4 @@
-use fib_rs::fib;
+use fib_rs::Fib;
 
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
@@ -13,7 +13,7 @@ fn App() -> impl IntoView {
     let (result, set_result) = signal(String::new());
 
     let calculate = move |_| match value.get() {
-        Ok(n) => set_result.set(format!("F({}) = {}", n, fib(n))),
+        Ok(n) => set_result.set(format!("F({}) = {}", n, Fib::single(n))),
         Err(_) => set_result.set("Please enter a valid number".to_string()),
     };
 
