@@ -15,36 +15,35 @@ fn App() -> impl IntoView {
     // Shared state for the result
     let (result, set_result) = signal(String::new());
 
-    let calculator = move || {
-        let mode = is_range.get();
-        if mode {
-            view! { <Range set_result=set_result /> }.into_any()
-        } else {
-            view! { <Single set_result=set_result /> }.into_any()
-        }
+    let calculator = move || match is_range.get() {
+        true => view! { <Range set_result=set_result /> }.into_any(),
+        false => view! { <Single set_result=set_result /> }.into_any(),
     };
 
     view! {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                <span class=move || {
-                    if !is_range.get() { "toggle-active" } else { "" }
+                <span class=move || match is_range.get() {
+                    false => "toggle-active",
+                    true => "",
                 }>"Single"</span>
                 <button class="toggle-button" on:click=move |_| toggle()>
                     <div class=move || {
-                        if is_range.get() {
-                            "toggle-thumb toggle-thumb-right"
-                        } else {
-                            "toggle-thumb toggle-thumb-left"
+                        match is_range.get() {
+                            true => "toggle-thumb toggle-thumb-right",
+                            false => "toggle-thumb toggle-thumb-left",
                         }
                     }></div>
                 </button>
-                <span class=move || if is_range.get() { "toggle-active" } else { "" }>"Range"</span>
+                <span class=move || match is_range.get() {
+                    true => "toggle-active",
+                    false => "",
+                }>"Range"</span>
             </div>
             <div>{calculator}</div>
             // Only show result here:
-            <p style="overflow-wrap: break-word;">{result}</p>
+            <p class=".result-container">{result}</p>
         </div>
     }
 }
