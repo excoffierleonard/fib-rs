@@ -1,7 +1,7 @@
 use fib_rs::Fib;
-
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
+use leptos_use::use_toggle;
 
 fn main() {
     mount_to_body(App);
@@ -9,19 +9,49 @@ fn main() {
 
 #[component]
 fn App() -> impl IntoView {
+    let toggle_ret = use_toggle(true);
+    let toggle = toggle_ret.toggle;
+    let is_range = toggle_ret.value;
+    // Shared state for the result
+    let (result, set_result) = signal(String::new());
+
+    let calculator = move || {
+        let mode = is_range.get();
+        if mode {
+            view! { <Range set_result=set_result /> }.into_any()
+        } else {
+            view! { <Single set_result=set_result /> }.into_any()
+        }
+    };
+
     view! {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
-            <Range />
+            <div class="mode-toggle">
+                <span class=move || {
+                    if !is_range.get() { "toggle-active" } else { "" }
+                }>"Single"</span>
+                <button class="toggle-button" on:click=move |_| toggle()>
+                    <div class=move || {
+                        if is_range.get() {
+                            "toggle-thumb toggle-thumb-right"
+                        } else {
+                            "toggle-thumb toggle-thumb-left"
+                        }
+                    }></div>
+                </button>
+                <span class=move || if is_range.get() { "toggle-active" } else { "" }>"Range"</span>
+            </div>
+            <div>{calculator}</div>
+            // Only show result here:
+            <p style="overflow-wrap: break-word;">{result}</p>
         </div>
     }
 }
 
 #[component]
-fn Single() -> impl IntoView {
+fn Single(set_result: WriteSignal<String>) -> impl IntoView {
     let (value, set_value) = signal(Ok(0u128));
-    let (result, set_result) = signal(String::new());
-
     let calculate = move |_| match value.get() {
         Ok(n) => set_result.set(format!("F({}) = {}", n, Fib::single(n))),
         Err(_) => set_result.set("Please enter a valid number".to_string()),
@@ -34,15 +64,13 @@ fn Single() -> impl IntoView {
             on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
         />
         <button on:click=calculate>"Calculate"</button>
-        <p style="overflow-wrap: break-word;">{result}</p>
     }
 }
 
 #[component]
-fn Range() -> impl IntoView {
+fn Range(set_result: WriteSignal<String>) -> impl IntoView {
     let (start, set_start) = signal(0u128);
     let (end, set_end) = signal(0u128);
-    let (result, set_result) = signal(String::new());
 
     let calculate = move |_| {
         if start.get() > end.get() {
@@ -71,6 +99,5 @@ fn Range() -> impl IntoView {
             />
         </div>
         <button on:click=calculate>"Calculate Range"</button>
-        <p style="overflow-wrap: break-word;">{result}</p>
     }
 }
