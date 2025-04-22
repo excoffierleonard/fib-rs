@@ -14,7 +14,7 @@ fn App() -> impl IntoView {
         toggle,
         value,
         set_value: _,
-    } = use_toggle(true);
+    } = use_toggle(false);
 
     // Shared state for the result
     let (result, set_result) = signal(String::new());
@@ -50,7 +50,7 @@ fn App() -> impl IntoView {
                 <span class=range_class>"Range"</span>
             </div>
             <div>{calculator}</div>
-            <p class=".result-container">{result}</p>
+            <p class="result-container">{result}</p>
         </div>
     }
 }
@@ -60,7 +60,10 @@ fn Single(set_result: WriteSignal<String>) -> impl IntoView {
     let (value, set_value) = signal(Ok(0u128));
 
     let calculate = move |_| match value.get() {
-        Ok(n) => set_result.set(format!("F({}) = {}", n, Fib::single(n))),
+        Ok(n) => set_result.set({
+            let result = Fib::single(n);
+            format!("F({}) = {}", n, result)
+        }),
         Err(_) => set_result.set("Please enter a valid number".to_string()),
     };
 
@@ -85,7 +88,8 @@ fn Range(set_result: WriteSignal<String>) -> impl IntoView {
             if start > end {
                 set_result.set("Invalid range: end < start".to_string());
             } else {
-                set_result.set(format!("{:?}", Fib::range(start, end)));
+                let results = Fib::range(start, end);
+                set_result.set(format!("{:?}", results));
             }
         } else {
             set_result.set("Invalid input(s).".to_string());
