@@ -9,6 +9,7 @@ fn main() {
 
 #[component]
 fn App() -> impl IntoView {
+    // Toggle state for the calculator mode (single or range)
     let UseToggleReturn {
         toggle,
         value,
@@ -18,11 +19,13 @@ fn App() -> impl IntoView {
     // Shared state for the result
     let (result, set_result) = signal(String::new());
 
+    // The calculator component that will be displayed based on the toggle state
     let calculator = move || match value.get() {
         true => view! { <Range set_result=set_result /> }.into_any(),
         false => view! { <Single set_result=set_result /> }.into_any(),
     };
 
+    // Classes for the toggle button
     let single_class = move || match value.get() {
         false => "toggle-active",
         true => "",
@@ -77,15 +80,16 @@ fn Range(set_result: WriteSignal<String>) -> impl IntoView {
     let (start, set_start) = signal(Ok(0u128));
     let (end, set_end) = signal(Ok(0u128));
 
-    let calculate = move |_| match (start.get(), end.get()) {
-        (Ok(start), Ok(end)) => {
+    let calculate = move |_| {
+        if let (Ok(start), Ok(end)) = (start.get(), end.get()) {
             if start > end {
                 set_result.set("Invalid range: end < start".to_string());
             } else {
                 set_result.set(format!("{:?}", Fib::range(start, end)));
             }
+        } else {
+            set_result.set("Invalid input(s).".to_string());
         }
-        _ => set_result.set("Invalid input(s).".to_string()),
     };
 
     view! {
