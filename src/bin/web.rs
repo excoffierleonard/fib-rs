@@ -12,7 +12,7 @@ fn App() -> impl IntoView {
     let UseToggleReturn {
         toggle,
         value,
-        set_value,
+        set_value: _,
     } = use_toggle(true);
 
     // Shared state for the result
