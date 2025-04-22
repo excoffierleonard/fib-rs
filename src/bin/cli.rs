@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use fib_rs::{fib, fib_range};
+use fib_rs::Fib;
 
 #[derive(Parser)]
 #[command(version)]
@@ -29,11 +29,11 @@ fn main() {
 
     match &cli.command {
         Commands::Single { n } => {
-            let result = fib(*n);
+            let result = Fib::single(*n);
             println!("F({}) = {}", n, result);
         }
         Commands::Range { start, end } => {
-            let results = fib_range(*start, *end);
+            let results = Fib::range(*start, *end);
 
             if results.is_empty() {
                 eprintln!("Invalid range: end < start");
