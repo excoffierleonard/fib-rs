@@ -1,4 +1,4 @@
-use criterion::{Criterion, black_box, criterion_group, criterion_main};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use fib_rs::{fib, fib_range};
 
 fn fib_n_benchmark(c: &mut Criterion) {
@@ -16,19 +16,23 @@ fn fib_sequence_benchmark(c: &mut Criterion) {
     let mut g = c.benchmark_group("Fibonacci Sequence Benchmarks (Inclusive)");
     g.sample_size(10);
 
-    g.bench_function("0-1,000", |b| b.iter(|| fib_range(black_box(0..=1_000))));
-    g.bench_function("0-10,000", |b| b.iter(|| fib_range(black_box(0..=10_000))));
+    g.bench_function("0-1,000", |b| {
+        b.iter(|| fib_range(black_box(0), black_box(1_000)))
+    });
+    g.bench_function("0-10,000", |b| {
+        b.iter(|| fib_range(black_box(0), black_box(10_000)))
+    });
     g.bench_function("0-100,000", |b| {
-        b.iter(|| fib_range(black_box(0..=100_000)))
+        b.iter(|| fib_range(black_box(0), black_box(100_000)))
     });
     g.bench_function("1,000-2,000", |b| {
-        b.iter(|| fib_range(black_box(1_000..=2_000)))
+        b.iter(|| fib_range(black_box(1_000), black_box(2_000)))
     });
     g.bench_function("10,000-20,000", |b| {
-        b.iter(|| fib_range(black_box(10_000..=20_000)))
+        b.iter(|| fib_range(black_box(10_000), black_box(20_000)))
     });
     g.bench_function("100,000-200,000", |b| {
-        b.iter(|| fib_range(black_box(100_000..=200_000)))
+        b.iter(|| fib_range(black_box(100_000), black_box(200_000)))
     });
 }
 

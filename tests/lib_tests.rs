@@ -11,8 +11,8 @@ fn test_fibonacci_identities() {
 #[test]
 fn test_range_consistency() {
     // Test individual vs range calculations match
-    let range = 0..=1000;
-    let range_results = fib_range(range.clone());
+    let range = (0..=1000);
+    let range_results = fib_range(*range.start(), *range.end());
 
     for (i, n) in range.enumerate() {
         assert_eq!(range_results[i], fib(n));
