@@ -1,7 +1,7 @@
 use fib_rs::Fib;
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
-use leptos_use::use_toggle;
+use leptos_use::{use_toggle, UseToggleReturn};
 
 fn main() {
     mount_to_body(App);
@@ -9,26 +9,29 @@ fn main() {
 
 #[component]
 fn App() -> impl IntoView {
-    let toggle_ret = use_toggle(true);
-    let toggle = toggle_ret.toggle;
-    let is_range = toggle_ret.value;
+    let UseToggleReturn {
+        toggle,
+        value,
+        set_value,
+    } = use_toggle(true);
+
     // Shared state for the result
     let (result, set_result) = signal(String::new());
 
-    let calculator = move || match is_range.get() {
+    let calculator = move || match value.get() {
         true => view! { <Range set_result=set_result /> }.into_any(),
         false => view! { <Single set_result=set_result /> }.into_any(),
     };
 
-    let single_class = move || match is_range.get() {
+    let single_class = move || match value.get() {
         false => "toggle-active",
         true => "",
     };
-    let range_class = move || match is_range.get() {
+    let range_class = move || match value.get() {
         true => "toggle-active",
         false => "",
     };
-    let thumb_class = move || match is_range.get() {
+    let thumb_class = move || match value.get() {
         true => "toggle-thumb toggle-thumb-right",
         false => "toggle-thumb toggle-thumb-left",
     };
