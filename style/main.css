@@ -19,7 +19,7 @@ body {
   min-height: 100vh;
 }
 
-div {
+.app-container {
   background-color: white;
   border-radius: 1rem;
   box-shadow: var(--shadow);
@@ -34,7 +34,7 @@ h1 {
   margin-bottom: 1rem;
 }
 
-input {
+.number-input {
   width: 100%;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -42,6 +42,10 @@ input {
   border-radius: 1rem;
   font-size: 1rem;
   box-sizing: border-box;
+}
+
+.result-container {
+  overflow-wrap: break-word;
 }
 
 button {
@@ -70,8 +74,54 @@ p {
   overflow: auto;
 }
 
+/* Toggle component styles */
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.toggle-button {
+  position: relative;
+  width: 3rem;
+  height: 1.5rem;
+  background-color: var(--border-color);
+  border-radius: 1rem;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-thumb {
+  position: absolute;
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-thumb-left {
+  transform: translateX(0.2rem);
+}
+
+.toggle-thumb-right {
+  transform: translateX(1.6rem);
+  background-color: var(--accent-color);
+}
+
+.toggle-active {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
 @media (max-width: 600px) {
-  div {
+  .app-container {
     padding: 1rem;
   }
 

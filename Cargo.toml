@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "0.4.1"
+version = "0.4.2"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
@@ -13,7 +13,7 @@ readme = "README.md"
 [features]
 default = ["cli"]
 cli = ["clap"]
-web = ["leptos"]
+web = ["leptos", "leptos-use"]
 
 [dependencies]
 # Core dependencies
@@ -26,6 +26,7 @@ clap = { version = "4.5.34", features = ["derive"], optional = true }
 
 # Web dependencies
 leptos = { version = "0.7.8", features = ["csr"], optional = true }
+leptos-use = { version = "0.15.7", features = ["use_toggle"], optional = true }
 
 [dev-dependencies]
 criterion = "0.5.1"
