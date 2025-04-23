@@ -86,6 +86,12 @@ p {
   justify-content: center;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
+  min-width: 14rem;
+}
+
+.toggle-label {
+  width: 4rem;
+  text-align: center;
 }
 
 .toggle-button {
@@ -121,8 +127,9 @@ p {
 }
 
 .toggle-active {
-  font-weight: bold;
   color: var(--accent-color);
+  width: 4rem;
+  text-align: center;
 }
 
 @media (max-width: 600px) {

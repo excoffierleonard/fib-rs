@@ -23,7 +23,7 @@ fn App() -> impl IntoView {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                <span class:toggle-active=move || value.get()>"Single"</span>
+                <div class="toggle-label" class:toggle-active=move || value.get()>"Single"</div>
                 <button class="toggle-button" on:click=move |_| toggle()>
                     <div
                         class="toggle-thumb"
@@ -31,7 +31,7 @@ fn App() -> impl IntoView {
                         class:toggle-thumb-right=move || !value.get()
                     ></div>
                 </button>
-                <span class:toggle-active=move || !value.get()>"Range"</span>
+                <div class="toggle-label" class:toggle-active=move || !value.get()>"Range"</div>
             </div>
             <Calculator set_result=set_result is_single_mode=value />
             <div class="result-container">
