@@ -1,5 +1,4 @@
 use fib_rs::Fib;
-
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use leptos_use::{UseToggleReturn, use_toggle};
@@ -16,36 +15,22 @@ fn App() -> impl IntoView {
         value,
         set_value: _,
     } = use_toggle(true);
-
     let (result, set_result) = signal(Vec::<String>::new());
-
-    // The calculator component that will be displayed based on the toggle state
-    // TODO: Optimize this to avoid re-rendering the entire component by having the calculate button in this component
-    // TODO: Check all the if statemetns here to see if they can be optmizied, maybe look into Show componenet and Memoizing
-
-    // Classes for the toggle button
-    let single_class = move || match value.get() {
-        true => "toggle-active",
-        false => "",
-    };
-    let range_class = move || match value.get() {
-        false => "toggle-active",
-        true => "",
-    };
-    let thumb_class = move || match value.get() {
-        false => "toggle-thumb toggle-thumb-right",
-        true => "toggle-thumb toggle-thumb-left",
-    };
 
     view! {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                <span class=single_class>"Single"</span>
+                // Use class: directive for conditional classes - more idiomatic
+                <span class:toggle-active=move || value.get()>"Single"</span>
                 <button class="toggle-button" on:click=move |_| toggle()>
-                    <div class=thumb_class></div>
+                    <div
+                        class="toggle-thumb"
+                        class:toggle-thumb-left=move || value.get()
+                        class:toggle-thumb-right=move || !value.get()
+                    ></div>
                 </button>
-                <span class=range_class>"Range"</span>
+                <span class:toggle-active=move || !value.get()>"Range"</span>
             </div>
             <Calculator set_result=set_result is_single_mode=value />
             <div class="result-container">
