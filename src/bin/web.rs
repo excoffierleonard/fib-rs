@@ -16,8 +16,7 @@ fn App() -> impl IntoView {
         set_value: _,
     } = use_toggle(true);
 
-    // Shared state for the result
-    let (result, set_result) = signal(String::new());
+    let (result, set_result) = signal(Vec::<String>::new());
 
     // The calculator component that will be displayed based on the toggle state
     let calculator = move || match value.get() {
@@ -50,21 +49,26 @@ fn App() -> impl IntoView {
                 <span class=range_class>"Range"</span>
             </div>
             <div>{calculator}</div>
-            <p class="result-container">{result}</p>
+
+            <div class="result-container">
+                {move || {
+                    result.get().into_iter().map(|line| view! { <p>{line}</p> }).collect_view()
+                }}
+            </div>
         </div>
     }
 }
 
 #[component]
-fn Single(set_result: WriteSignal<String>) -> impl IntoView {
+fn Single(set_result: WriteSignal<Vec<String>>) -> impl IntoView {
     let (value, set_value) = signal(Ok(0u128));
 
     let calculate = move |_| match value.get() {
-        Ok(n) => set_result.set({
+        Ok(n) => {
             let result = Fib::single(n);
-            format!("F({}) = {}", n, result)
-        }),
-        Err(_) => set_result.set("Please enter a valid number".to_string()),
+            set_result.set(vec![format!("F({}) = {}", n, result)]);
+        }
+        Err(_) => set_result.set(vec!["Please enter a valid number".to_string()]),
     };
 
     view! {
@@ -79,20 +83,25 @@ fn Single(set_result: WriteSignal<String>) -> impl IntoView {
 }
 
 #[component]
-fn Range(set_result: WriteSignal<String>) -> impl IntoView {
+fn Range(set_result: WriteSignal<Vec<String>>) -> impl IntoView {
     let (start, set_start) = signal(Ok(0u128));
     let (end, set_end) = signal(Ok(0u128));
 
     let calculate = move |_| {
         if let (Ok(start), Ok(end)) = (start.get(), end.get()) {
             if start > end {
-                set_result.set("Invalid range: end < start".to_string());
+                set_result.set(vec!["Invalid range: end < start".to_string()]);
             } else {
                 let results = Fib::range(start, end);
-                set_result.set(format!("{:?}", results));
+                let formatted = results
+                    .into_iter()
+                    .enumerate()
+                    .map(|(i, v)| format!("F({}) = {}", start + i as u128, v))
+                    .collect();
+                set_result.set(formatted);
             }
         } else {
-            set_result.set("Invalid input(s).".to_string());
+            set_result.set(vec!["Invalid input(s).".to_string()]);
         }
     };
 
