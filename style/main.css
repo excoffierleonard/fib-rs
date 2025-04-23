@@ -218,6 +218,35 @@ button:focus {
   text-align: center;
 }
 
+/* GitHub link button */
+.github-link {
+  position: fixed;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-round);
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-default);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  z-index: 100;
+  font-size: 1.5rem;
+}
+
+.github-link:hover, .github-link:focus {
+  background-color: var(--color-accent-hover);
+  color: var(--color-white);
+  outline: none;
+}
+
+.github-link:focus {
+  box-shadow: var(--focus-ring-default);
+}
+
 /* Print styles for better output */
 @media print {
   body {
@@ -233,7 +262,8 @@ button:focus {
   }
 
   button,
-  .mode-toggle {
+  .mode-toggle,
+  .github-link {
     display: none;
   }
 }
