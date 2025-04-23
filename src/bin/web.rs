@@ -35,9 +35,9 @@ fn App() -> impl IntoView {
             </div>
             <Calculator set_result=set_result is_single_mode=value />
             <div class="result-container">
-                {move || {
-                    result.get().into_iter().map(|line| view! { <p>{line}</p> }).collect_view()
-                }}
+                <For each=move || result.get() key=|line| line.clone() let:line>
+                    <p>{line}</p>
+                </For>
             </div>
         </div>
     }
