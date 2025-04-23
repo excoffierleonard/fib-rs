@@ -1,7 +1,7 @@
 use fib_rs::Fib;
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
-use leptos_use::{use_toggle, UseToggleReturn};
+use leptos_use::{UseToggleReturn, use_toggle};
 
 fn main() {
     mount_to_body(App);
