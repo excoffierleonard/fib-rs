@@ -119,20 +119,21 @@ body {
 
 /* Accessible buttons with appropriate contrast */
 button {
-  background-color: var(--color-accent);
-  color: var(--color-white);
-  border: none;
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 0.1875rem solid var(--color-accent);
   border-radius: var(--radius-sm);
   padding: calc(var(--spacing-md) * 0.75) var(--spacing-lg);
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color var(--transition-fast), transform 0.1s, box-shadow var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform 0.1s, box-shadow var(--transition-fast);
   margin-bottom: var(--spacing-lg);
 }
 
 button:hover {
-  background-color: var(--color-accent-hover);
+  background-color: var(--color-accent);
+  color: var(--color-white);
 }
 
 button:focus {
@@ -184,6 +185,7 @@ button:focus {
   transition: background-color var(--transition-medium);
   display: flex;
   align-items: center;
+  border: none;
 }
 
 .toggle-button:focus {
@@ -207,7 +209,6 @@ button:focus {
 
 .toggle-thumb-right {
   transform: translateX(1.9rem);
-  background-color: var(--color-accent);
 }
 
 .toggle-active {
