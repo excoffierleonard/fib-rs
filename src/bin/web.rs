@@ -15,13 +15,14 @@ fn App() -> impl IntoView {
         value,
         set_value: _,
     } = use_toggle(true);
+
+    // Signal to hold the result of the calculation
     let (result, set_result) = signal(Vec::<String>::new());
 
     view! {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                // Use class: directive for conditional classes - more idiomatic
                 <span class:toggle-active=move || value.get()>"Single"</span>
                 <button class="toggle-button" on:click=move |_| toggle()>
                     <div
@@ -84,7 +85,7 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
             when=move || is_single_mode.get()
             fallback=move || {
                 view! {
-                    <div style="display: flex; gap: 1rem;">
+                    <div class="range-inputs">
                         <input
                             class="number-input"
                             type="number"

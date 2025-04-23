@@ -48,6 +48,11 @@ h1 {
   overflow-wrap: break-word;
 }
 
+.range-inputs {
+  display: flex;
+  gap: 1rem;
+}
+
 button {
   background-color: var(--accent-color);
   color: white;
