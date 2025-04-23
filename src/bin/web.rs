@@ -19,6 +19,8 @@ fn App() -> impl IntoView {
     let (result, set_result) = signal(Vec::<String>::new());
 
     // The calculator component that will be displayed based on the toggle state
+    // TODO: Optimize this to avoid re-rendering the entire component by having the calculate button in this component
+    // TODO: Check all the if statemetns here to see if they can be optmizied, maybe look into Show componenet and Memoizing
     let calculator = move || match value.get() {
         false => view! { <Range set_result=set_result /> }.into_any(),
         true => view! { <Single set_result=set_result /> }.into_any(),
