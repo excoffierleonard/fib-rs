@@ -26,7 +26,11 @@ fn App() -> impl IntoView {
                 <div class="toggle-label" class:toggle-active=move || value.get()>
                     "Single"
                 </div>
-                <button class="toggle-button" on:click=move |_| toggle()>
+                <button 
+                    class="toggle-button" 
+                    aria-label="Toggle calculation mode"
+                    on:click=move |_| toggle()
+                >
                     <div
                         class="toggle-thumb"
                         class:toggle-thumb-left=move || value.get()
