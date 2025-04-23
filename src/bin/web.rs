@@ -21,7 +21,7 @@ fn App() -> impl IntoView {
 
     view! {
         <div class="app-container">
-            <h1>"Fibonacci Calculator"</h1>
+            <h1 class="app-title">"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
                 <div class="toggle-label" class:toggle-active=move || value.get()>
                     "Single"
@@ -40,7 +40,7 @@ fn App() -> impl IntoView {
             <Calculator set_result=set_result is_single_mode=value />
             <div class="result-container">
                 <For each=move || result.get() key=|line| line.clone() let:line>
-                    <p>{line}</p>
+                    <p class="result-line">{line}</p>
                 </For>
             </div>
         </div>
