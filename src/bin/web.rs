@@ -23,7 +23,9 @@ fn App() -> impl IntoView {
         <div class="app-container">
             <h1>"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                <div class="toggle-label" class:toggle-active=move || value.get()>"Single"</div>
+                <div class="toggle-label" class:toggle-active=move || value.get()>
+                    "Single"
+                </div>
                 <button class="toggle-button" on:click=move |_| toggle()>
                     <div
                         class="toggle-thumb"
@@ -31,7 +33,9 @@ fn App() -> impl IntoView {
                         class:toggle-thumb-right=move || !value.get()
                     ></div>
                 </button>
-                <div class="toggle-label" class:toggle-active=move || !value.get()>"Range"</div>
+                <div class="toggle-label" class:toggle-active=move || !value.get()>
+                    "Range"
+                </div>
             </div>
             <Calculator set_result=set_result is_single_mode=value />
             <div class="result-container">
@@ -51,6 +55,18 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
     // Range mode signals
     let (start, set_start) = signal(Ok(0u128));
     let (end, set_end) = signal(Ok(0u128));
+
+    // Create an effect to reset values when mode changes
+    // TODO: Use a more efficient way to handle this if it exists
+    Effect::new(move |_| {
+        match is_single_mode.get() {
+            true => set_value.set(Ok(0u128)),
+            false => {
+                set_start.set(Ok(0u128));
+                set_end.set(Ok(0u128));
+            }
+        };
+    });
 
     // Combined calculate function that handles both modes using match statements
     let calculate = move |_| match is_single_mode.get() {
