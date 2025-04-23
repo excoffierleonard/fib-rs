@@ -16,112 +16,127 @@ fn App() -> impl IntoView {
         set_value: _,
     } = use_toggle(true);
 
+    // Signal to hold the result of the calculation
     let (result, set_result) = signal(Vec::<String>::new());
-
-    // The calculator component that will be displayed based on the toggle state
-    // TODO: Optimize this to avoid re-rendering the entire component by having the calculate button in this component
-    // TODO: Check all the if statemetns here to see if they can be optmizied, maybe look into Show componenet and Memoizing
-    let calculator = move || match value.get() {
-        false => view! { <Range set_result=set_result /> }.into_any(),
-        true => view! { <Single set_result=set_result /> }.into_any(),
-    };
-
-    // Classes for the toggle button
-    let single_class = move || match value.get() {
-        true => "toggle-active",
-        false => "",
-    };
-    let range_class = move || match value.get() {
-        false => "toggle-active",
-        true => "",
-    };
-    let thumb_class = move || match value.get() {
-        false => "toggle-thumb toggle-thumb-right",
-        true => "toggle-thumb toggle-thumb-left",
-    };
 
     view! {
         <div class="app-container">
-            <h1>"Fibonacci Calculator"</h1>
+            <h1 class="app-title">"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
-                <span class=single_class>"Single"</span>
-                <button class="toggle-button" on:click=move |_| toggle()>
-                    <div class=thumb_class></div>
+                <div class="toggle-label" class:toggle-active=move || value.get()>
+                    "Single"
+                </div>
+                <button
+                    class="toggle-button"
+                    aria-label="Toggle calculation mode"
+                    on:click=move |_| toggle()
+                >
+                    <div
+                        class="toggle-thumb"
+                        class:toggle-thumb-left=move || value.get()
+                        class:toggle-thumb-right=move || !value.get()
+                    ></div>
                 </button>
-                <span class=range_class>"Range"</span>
+                <div class="toggle-label" class:toggle-active=move || !value.get()>
+                    "Range"
+                </div>
             </div>
-            <div>{calculator}</div>
-
+            <Calculator set_result=set_result is_single_mode=value />
             <div class="result-container">
-                {move || {
-                    result.get().into_iter().map(|line| view! { <p>{line}</p> }).collect_view()
-                }}
+                <For each=move || result.get() key=|line| line.clone() let:line>
+                    <p class="result-line">{line}</p>
+                </For>
             </div>
         </div>
     }
 }
 
 #[component]
-fn Single(set_result: WriteSignal<Vec<String>>) -> impl IntoView {
+fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>) -> impl IntoView {
+    // Single mode signal
     let (value, set_value) = signal(Ok(0u128));
-
-    let calculate = move |_| match value.get() {
-        Ok(n) => {
-            let result = Fib::single(n);
-            set_result.set(vec![format!("F({}) = {}", n, result)]);
-        }
-        Err(_) => set_result.set(vec!["Please enter a valid number".to_string()]),
-    };
-
-    view! {
-        <input
-            class="number-input"
-            type="number"
-            placeholder="Enter a number"
-            on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
-        />
-        <button on:click=calculate>"Calculate"</button>
-    }
-}
-
-#[component]
-fn Range(set_result: WriteSignal<Vec<String>>) -> impl IntoView {
+    // Range mode signals
     let (start, set_start) = signal(Ok(0u128));
     let (end, set_end) = signal(Ok(0u128));
 
-    let calculate = move |_| {
-        if let (Ok(start), Ok(end)) = (start.get(), end.get()) {
-            if start > end {
-                set_result.set(vec!["Invalid range: end < start".to_string()]);
-            } else {
-                let results = Fib::range(start, end);
-                let formatted = results
-                    .into_iter()
-                    .enumerate()
-                    .map(|(i, v)| format!("F({}) = {}", start + i as u128, v))
-                    .collect();
-                set_result.set(formatted);
-            }
-        } else {
-            set_result.set(vec!["Invalid input(s).".to_string()]);
+    // Helper function to format number for display
+    let format_num = |result: Result<u128, _>| -> String {
+        match result {
+            Ok(0) => "".to_string(),
+            Ok(n) => n.to_string(),
+            Err(_) => "".to_string(),
         }
     };
 
+    // Create memoized values for display formatting
+    let value_display = Memo::new(move |_| format_num(value.get()));
+    let start_display = Memo::new(move |_| format_num(start.get()));
+    let end_display = Memo::new(move |_| format_num(end.get()));
+
+    // Combined calculate function that handles both modes
+    let calculate = move |_| match is_single_mode.get() {
+        true => match value.get() {
+            Ok(n) => {
+                let result = Fib::single(n);
+                set_result.set(vec![format!("F({}) = {}", n, result)]);
+            }
+            Err(_) => set_result.set(vec!["Please enter a valid number".to_string()]),
+        },
+        false => match (start.get(), end.get()) {
+            (Ok(start_val), Ok(end_val)) if start_val > end_val => {
+                set_result.set(vec!["Invalid range: end < start".to_string()]);
+            }
+            (Ok(start_val), Ok(end_val)) => {
+                let results = Fib::range(start_val, end_val);
+                let formatted = results
+                    .into_iter()
+                    .enumerate()
+                    .map(|(i, v)| format!("F({}) = {}", start_val + i as u128, v))
+                    .collect();
+                set_result.set(formatted);
+            }
+            _ => {
+                set_result.set(vec!["Invalid input(s).".to_string()]);
+            }
+        },
+    };
+
     view! {
-        <div style="display: flex; gap: 1rem;">
+        <Show
+            when=move || is_single_mode.get()
+            fallback=move || {
+                view! {
+                    <div class="range-inputs">
+                        <input
+                            class="number-input"
+                            type="number"
+                            placeholder="Start"
+                            prop:value=move || start_display.get()
+                            on:input:target=move |ev| {
+                                set_start.set(ev.target().value().parse::<u128>())
+                            }
+                        />
+                        <input
+                            class="number-input"
+                            type="number"
+                            placeholder="End"
+                            prop:value=move || end_display.get()
+                            on:input:target=move |ev| {
+                                set_end.set(ev.target().value().parse::<u128>())
+                            }
+                        />
+                    </div>
+                }
+            }
+        >
             <input
                 class="number-input"
                 type="number"
-                placeholder="Start"
-                on:input:target=move |ev| { set_start.set(ev.target().value().parse::<u128>()) }
+                placeholder="Enter a number"
+                prop:value=move || value_display.get()
+                on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
             />
-            <input
-                class="number-input"
-                type="number"
-                placeholder="End"
-                on:input:target=move |ev| { set_end.set(ev.target().value().parse::<u128>()) }
-            />
-        </div>
+        </Show>
         <button on:click=calculate>"Calculate"</button>
     }
 }

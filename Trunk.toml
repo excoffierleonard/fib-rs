@@ -4,8 +4,18 @@ dist = "dist"
 features = "web"
 
 [watch]
-watch = ["src", "index.html", "style"]
+watch = ["src", "index.html", "style", "assets"]
 
 [serve]
 port = 8080
 open = false
+
+[[hooks]]
+stage = "pre_build"
+command = "cp"
+command_arguments = ["assets/robots.txt", "dist/"]
+
+[[hooks]]
+stage = "pre_build"
+command = "cp"
+command_arguments = ["assets/favicon.svg", "dist/"]
