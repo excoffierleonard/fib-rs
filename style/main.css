@@ -1,19 +1,21 @@
 :root {
   /* Color palette */
-  --primary-color: #4a5568;
-  --accent-color: #5cc971;
-  --accent-color-hover: rgba(92, 201, 113, 0.8);
-  --bg-color: #f7fafc;
-  --text-color: #2d3748;
-  --border-color: #e2e8f0;
-  --container-bg: #ffffff;
-  --result-bg: #f1f5f9;
+  --color-primary: rgb(74, 85, 104);
+  --color-accent: rgb(92, 201, 113);
+  --color-accent-hover: rgba(92, 201, 113, 0.8);
+  --color-bg: rgb(247, 250, 252);
+  --color-text: rgb(45, 55, 72);
+  --color-border: rgb(226, 232, 240);
+  --color-container-bg: rgb(255, 255, 255);
+  --color-result-bg: rgb(241, 245, 249);
+  --color-white: rgb(255, 255, 255);
+  --color-black: rgb(0, 0, 0);
 
   /* Typography */
   --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  --mono-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  --base-font-size: 1rem;
-  --small-font-size: 0.875rem;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --font-size-base: 1rem;
+  --font-size-small: 0.875rem;
   --line-height: 1.5;
 
   /* Spacing */
@@ -23,14 +25,15 @@
   --spacing-xl: 2rem;
 
   /* Layout */
-  --border-radius-sm: 0.5rem;
-  --border-radius-lg: 1rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-round: 50%;
   --container-width: 90%;
   --container-max-width: 40rem;
 
   /* Effects */
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --focus-ring: 0 0 0 3px rgba(92, 201, 113, 0.5);
+  --shadow-default: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --focus-ring-default: 0 0 0 3px rgba(92, 201, 113, 0.5);
   --transition-fast: 0.2s;
   --transition-medium: 0.3s;
 }
@@ -38,8 +41,8 @@
 /* Base styles with improved accessibility */
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   margin: 0;
   padding: 0;
   display: flex;
@@ -51,9 +54,9 @@ body {
 
 /* Container with responsive width */
 .app-container {
-  background-color: var(--container-bg);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow);
+  background-color: var(--color-container-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-default);
   padding: var(--spacing-xl);
   width: var(--container-width);
   max-width: var(--container-max-width);
@@ -62,7 +65,7 @@ body {
 }
 
 .app-title {
-  color: var(--primary-color);
+  color: var(--color-primary);
   margin-top: 0;
   margin-bottom: var(--spacing-lg);
 }
@@ -72,17 +75,17 @@ body {
   width: 100%;
   padding: 0.75rem var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  border: 2px solid var(--border-color);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--base-font-size);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
   box-sizing: border-box;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .number-input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: var(--focus-ring);
+  border-color: var(--color-accent);
+  box-shadow: var(--focus-ring-default);
 }
 
 .result-container {
@@ -104,12 +107,12 @@ body {
 
 /* Accessible buttons with appropriate contrast */
 button {
-  background-color: var(--accent-color);
-  color: white;
+  background-color: var(--color-accent);
+  color: var(--color-white);
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   padding: 0.75rem 1.5rem;
-  font-size: var(--base-font-size);
+  font-size: var(--font-size-base);
   font-weight: 500;
   cursor: pointer;
   transition: background-color var(--transition-fast), transform 0.1s, box-shadow var(--transition-fast);
@@ -117,22 +120,22 @@ button {
 }
 
 button:hover {
-  background-color: var(--accent-color-hover);
+  background-color: var(--color-accent-hover);
 }
 
 button:focus {
   outline: none;
-  box-shadow: var(--focus-ring);
+  box-shadow: var(--focus-ring-default);
 }
 
 /* Results display with better readability */
 .result-line {
-  background-color: var(--result-bg);
+  background-color: var(--color-result-bg);
   padding: var(--spacing-md);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   text-align: left;
-  font-family: var(--mono-font);
-  font-size: var(--small-font-size);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
   line-height: 1.6;
   overflow: auto;
   max-height: 40vh;
@@ -160,7 +163,7 @@ button:focus {
   position: relative;
   width: 3.5rem;
   height: 1.75rem;
-  background-color: var(--border-color);
+  background-color: var(--color-border);
   border-radius: 1.5rem;
   padding: 0;
   margin: 0;
@@ -172,15 +175,15 @@ button:focus {
 
 .toggle-button:focus {
   outline: none;
-  box-shadow: var(--focus-ring);
+  box-shadow: var(--focus-ring-default);
 }
 
 .toggle-thumb {
   position: absolute;
   width: 1.4rem;
   height: 1.4rem;
-  background-color: var(--container-bg);
-  border-radius: 50%;
+  background-color: var(--color-container-bg);
+  border-radius: var(--radius-round);
   transition: transform var(--transition-medium);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -191,11 +194,11 @@ button:focus {
 
 .toggle-thumb-right {
   transform: translateX(1.9rem);
-  background-color: var(--accent-color);
+  background-color: var(--color-accent);
 }
 
 .toggle-active {
-  color: var(--accent-color);
+  color: var(--color-accent);
   font-weight: 600;
   width: 4rem;
   text-align: center;
@@ -204,7 +207,7 @@ button:focus {
 /* Print styles for better output */
 @media print {
   body {
-    background-color: var(--container-bg);
+    background-color: var(--color-container-bg);
   }
 
   .app-container {
@@ -225,12 +228,12 @@ button:focus {
 @media (prefers-color-scheme: white) {
   :root {
     /* Dark theme colors */
-    --bg-color: #1a202c;
-    --text-color: #e2e8f0;
-    --border-color: #4a5568;
-    --primary-color: #e2e8f0;
-    --container-bg: #2d3748;
-    --result-bg: #1a202c;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --color-bg: rgb(26, 32, 44);
+    --color-text: rgb(226, 232, 240);
+    --color-border: rgb(74, 85, 104);
+    --color-primary: rgb(226, 232, 240);
+    --color-container-bg: rgb(45, 55, 72);
+    --color-result-bg: rgb(26, 32, 44);
+    --shadow-default: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
 }
