@@ -56,18 +56,6 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
     let (start, set_start) = signal(Ok(0u128));
     let (end, set_end) = signal(Ok(0u128));
 
-    // Create an effect to reset values when mode changes
-    // TODO: Use a more efficient way to handle this if it exists
-    Effect::new(move |_| {
-        match is_single_mode.get() {
-            true => set_value.set(Ok(0u128)),
-            false => {
-                set_start.set(Ok(0u128));
-                set_end.set(Ok(0u128));
-            }
-        };
-    });
-
     // Combined calculate function that handles both modes using match statements
     let calculate = move |_| match is_single_mode.get() {
         true => match value.get() {
@@ -106,6 +94,10 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                             class="number-input"
                             type="number"
                             placeholder="Start"
+                            prop:value=move || match start.get() {
+                                Ok(n) => if n == 0 { "".to_string() } else { n.to_string() }
+                                Err(_) => "".to_string(),
+                            }
                             on:input:target=move |ev| {
                                 set_start.set(ev.target().value().parse::<u128>())
                             }
@@ -114,6 +106,10 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                             class="number-input"
                             type="number"
                             placeholder="End"
+                            prop:value=move || match end.get() {
+                                Ok(n) => if n == 0 { "".to_string() } else { n.to_string() }
+                                Err(_) => "".to_string(),
+                            }
                             on:input:target=move |ev| {
                                 set_end.set(ev.target().value().parse::<u128>())
                             }
@@ -126,6 +122,10 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                 class="number-input"
                 type="number"
                 placeholder="Enter a number"
+                prop:value=move || match value.get() {
+                    Ok(n) => if n == 0 { "".to_string() } else { n.to_string() }
+                    Err(_) => "".to_string(),
+                }
                 on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
             />
         </Show>
