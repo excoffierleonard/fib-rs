@@ -1,6 +1,7 @@
 # fib-rs
 
 [![Crates.io](https://img.shields.io/crates/v/fib-rs)](https://crates.io/crates/fib-rs)
+[![Crates.io](https://img.shields.io/crates/d/fib-rs)](https://crates.io/crates/fib-rs)
 [![Documentation](https://img.shields.io/docsrs/fib-rs)](https://docs.rs/fib-rs)
 [![MIT](https://img.shields.io/crates/l/fib-rs)](LICENSE)
 
