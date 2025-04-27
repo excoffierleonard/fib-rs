@@ -22,7 +22,7 @@ num-traits = "0.2.19"
 rayon = "1.10.0"
 
 # CLI dependencies
-clap = { version = "4.5.34", features = ["derive"], optional = true }
+clap = { version = "4.5.37", features = ["derive"], optional = true }
 
 # Web dependencies
 leptos = { version = "0.7.8", features = ["csr"], optional = true }
