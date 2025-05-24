@@ -1,3 +1,52 @@
+//! # fib-rs
+//!
+//! A highly optimized Fibonacci number calculator for Rust that efficiently computes
+//! arbitrarily large Fibonacci numbers.
+//!
+//! ## Features
+//!
+//! - **Fast doubling algorithm**: Calculates Fibonacci numbers in O(log n) time
+//! - **Handles massive inputs**: Compute Fibonacci numbers up to F(10,000,000) and beyond
+//! - **Range calculation**: Generate sequences of consecutive Fibonacci numbers with parallel processing
+//! - **BigUint support**: Uses arbitrary precision integers for handling large Fibonacci numbers
+//!
+//! ## Examples
+//!
+//! ```
+//! use fib_rs::Fib;
+//! use num_bigint::BigUint;
+//! use num_traits::Zero;
+//!
+//! // Calculate a single Fibonacci number
+//! let n = 100;
+//! let result = Fib::single(n);
+//! assert!(result > BigUint::zero());
+//!
+//! // Calculate a range of Fibonacci numbers (F(3) through F(10))
+//! let start = 3;
+//! let end = 10;
+//! let results = Fib::range(start, end);
+//! assert_eq!(results.len(), (end - start + 1) as usize);
+//! ```
+//!
+//! ## Algorithm Details
+//!
+//! ### Single Fibonacci Number
+//!
+//! For computing a single Fibonacci number, this implementation uses the fast doubling algorithm
+//! with logarithmic time complexity:
+//!
+//! - For even n: F(2k) = F(k) * (2*F(k+1) - F(k))
+//! - For odd n:  F(2k+1) = F(k+1)^2 + F(k)^2
+//!
+//! ### Fibonacci Range
+//!
+//! The range implementation combines three approaches for optimal performance:
+//!
+//! 1. **Parallel processing**: Divides the requested range into optimal chunks based on available CPU threads
+//! 2. **Smart initialization**: Uses the fast doubling algorithm to efficiently find the starting values for each chunk
+//! 3. **Iterative calculation**: After finding starting values, computes subsequent Fibonacci numbers iteratively within each chunk
+
 use std::{
     cmp::{max, min},
     mem::replace,
@@ -8,9 +57,22 @@ use num_traits::{One, Zero};
 use rayon::{current_num_threads, prelude::*};
 
 /// Type alias for the result of the fast doubling algorithm
+///
+/// Represents a pair of consecutive Fibonacci numbers (F(n), F(n+1))
 type FibPair = (BigUint, BigUint);
 
-/// A struct for computing Fibonacci numbers efficiently.
+/// A utility struct for computing Fibonacci numbers efficiently.
+///
+/// This struct provides static methods for calculating Fibonacci numbers using
+/// highly optimized algorithms. It supports both single Fibonacci number calculation
+/// and generating ranges of consecutive Fibonacci numbers.
+///
+/// The implementation uses a fast doubling algorithm for O(log n) time complexity
+/// and leverages parallel processing for range calculations to maximize performance.
+///
+/// For Fibonacci numbers beyond F(185), the implementation automatically switches to
+/// using `BigUint` for arbitrary precision, ensuring correct results for extremely large
+/// Fibonacci numbers.
 pub struct Fib;
 
 impl Fib {
@@ -52,6 +114,26 @@ impl Fib {
     }
 
     /// Helper function for the fast doubling algorithm.
+    ///
+    /// This function implements the recursive divide-and-conquer approach for computing
+    /// Fibonacci numbers using the fast doubling method. It returns a pair of consecutive
+    /// Fibonacci numbers (F(n), F(n+1)) to enable the recursion.
+    ///
+    /// The algorithm is based on the following mathematical identities:
+    /// - For even n: F(2k) = F(k) * (2*F(k+1) - F(k))
+    /// - For odd n:  F(2k+1) = F(k+1)^2 + F(k)^2
+    ///
+    /// # Arguments
+    ///
+    /// * `n` - The index of the Fibonacci number to calculate
+    ///
+    /// # Returns
+    ///
+    /// * A tuple (F(n), F(n+1)) containing the nth and (n+1)th Fibonacci numbers
+    ///
+    /// # Time Complexity
+    ///
+    /// * O(log n) due to the recursive divide-and-conquer approach
     fn fib_fast_doubling_helper(n: u128) -> FibPair {
         if n == 0 {
             return (BigUint::zero(), BigUint::one());
@@ -61,10 +143,10 @@ impl Fib {
         let (fk, fk1) = Self::fib_fast_doubling_helper(n / 2);
 
         // Calculate F(2k) and F(2k+1)
-        let two_fk1 = &fk1 << 1;
+        let two_fk1 = &fk1 << 1; // Efficiently multiply by 2 using bit shift
         let term = &two_fk1 - &fk;
-        let f2k = &fk * &term;
-        let f2k1 = &fk * &fk + &fk1 * &fk1;
+        let f2k = &fk * &term; // F(2k) = F(k) * (2*F(k+1) - F(k))
+        let f2k1 = &fk * &fk + &fk1 * &fk1; // F(2k+1) = F(k)^2 + F(k+1)^2
 
         // Return appropriate pair based on whether n is even or odd
         if n % 2 == 0 {
@@ -77,6 +159,16 @@ impl Fib {
 
     /// Generates Fibonacci numbers for indices in the given inclusive range.
     ///
+    /// This method efficiently computes a sequence of consecutive Fibonacci numbers
+    /// using parallel processing for improved performance. It divides the requested range
+    /// into optimal chunks based on the available CPU threads, calculates each chunk in
+    /// parallel, and then combines the results.
+    ///
+    /// The implementation uses a hybrid approach that:
+    /// 1. Uses the fast doubling algorithm to efficiently find the starting values for each chunk
+    /// 2. Computes subsequent Fibonacci numbers iteratively within each chunk
+    /// 3. Processes chunks in parallel using the Rayon library
+    ///
     /// # Arguments
     ///
     /// * `start` - The starting index of the range
@@ -88,8 +180,13 @@ impl Fib {
     ///
     /// # Complexity
     ///
-    /// * Time complexity: O(n) for generating Fibonacci numbers in the range.
+    /// * Time complexity: Approximately O(n/t + log(start)) where n is the range size and t is the number of threads.
     /// * Space complexity: O(n) for storing the Fibonacci numbers in a vector.
+    ///
+    /// # Performance
+    ///
+    /// Performance scales with the number of available CPU cores. For large ranges, the
+    /// parallelization provides significant speedup compared to sequential calculation.
     ///
     /// # Examples
     ///
@@ -105,21 +202,35 @@ impl Fib {
     /// assert_eq!(fibs[0], BigUint::from(2u32)); // F(3) = 2
     /// assert_eq!(fibs[7], BigUint::from(55u32)); // F(10) = 55
     /// ```
+    ///
+    /// For large ranges, the parallel implementation provides significant performance improvements:
+    ///
+    /// ```
+    /// use fib_rs::Fib;
+    ///
+    /// // Generate 10,000 consecutive Fibonacci numbers efficiently
+    /// let large_range = Fib::range(1000, 10999);
+    /// assert_eq!(large_range.len(), 10000);
+    /// ```
     pub fn range(start: u128, end: u128) -> Vec<BigUint> {
+        // Validate input range
         if end < start {
             return Vec::new();
         }
 
+        // Calculate total number of Fibonacci numbers to generate
         let total_count = (end - start + 1) as usize;
 
-        // Determine chunk size for parallelization
+        // Determine optimal chunk size for parallelization based on available CPU threads
+        // This balances parallelism with the overhead of creating too many small chunks
         let num_threads = current_num_threads();
         let chunk_size = max(1, total_count / num_threads);
 
-        // Calculate number of chunks with ceiling division
+        // Calculate number of chunks with ceiling division to ensure we cover the entire range
         let num_chunks = total_count.div_ceil(chunk_size);
 
-        // Create chunk boundaries
+        // Create chunk boundaries for parallel processing
+        // Each chunk represents a subrange of consecutive Fibonacci numbers
         let chunks: Vec<_> = (0..num_chunks)
             .map(|i| {
                 let chunk_start = start + (i as u128) * (chunk_size as u128);
@@ -128,23 +239,27 @@ impl Fib {
             })
             .collect();
 
-        // Process each chunk in parallel
+        // Process each chunk in parallel using Rayon's parallel iterator
+        // Each thread calculates a portion of the Fibonacci sequence independently
         let results: Vec<Vec<BigUint>> = chunks
             .par_iter()
             .map(|&(chunk_start, chunk_end)| {
                 let chunk_size = (chunk_end - chunk_start + 1) as usize;
                 let mut result = Vec::with_capacity(chunk_size);
 
-                // Get starting Fibonacci numbers for this chunk
+                // Use the fast doubling algorithm to efficiently find the starting values
+                // for this chunk. This is a key optimization for chunk initialization.
                 let (mut a, mut b) = Self::fib_fast_doubling_helper(chunk_start);
 
-                // Add the first value
+                // Add the first value (F(chunk_start)) to the result
                 result.push(a.clone());
 
-                // Compute the rest of the chunk iteratively
+                // Compute the rest of the chunk iteratively using the recurrence relation:
+                // F(n+2) = F(n+1) + F(n)
+                // This is more efficient than using the fast doubling algorithm for each number
                 for _ in 1..chunk_size {
                     let next = &a + &b;
-                    a = replace(&mut b, next);
+                    a = replace(&mut b, next); // Efficiently swap values
                     result.push(a.clone());
                 }
 
@@ -152,7 +267,8 @@ impl Fib {
             })
             .collect();
 
-        // Combine results efficiently
+        // Combine results from all chunks into a single, continuous vector
+        // Pre-allocate the exact size needed to avoid multiple reallocations
         let mut result = Vec::with_capacity(total_count);
         for chunk in results {
             result.extend(chunk);
