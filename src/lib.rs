@@ -149,7 +149,7 @@ impl Fib {
         let f2k1 = &fk * &fk + &fk1 * &fk1; // F(2k+1) = F(k)^2 + F(k+1)^2
 
         // Return appropriate pair based on whether n is even or odd
-        if n % 2 == 0 {
+        if n.is_multiple_of(2) {
             (f2k, f2k1)
         } else {
             let f2k2 = &f2k1 + &f2k;
