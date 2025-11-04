@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "0.4.6"
+version = "1.0.0"
 edition = "2024"
 description = "A fast Fibonacci number calculator"
 repository = "https://github.com/excoffierleonard/fib-rs"
@@ -19,20 +19,20 @@ web = ["leptos", "leptos-use"]
 # Core dependencies
 num-bigint = "0.4.6"
 num-traits = "0.2.19"
-rayon = "1.10.0"
+rayon = "1.11.0"
 
 # CLI dependencies
-clap = { version = "4.5.37", features = ["derive"], optional = true }
+clap = { version = "4.5.51", features = ["derive"], optional = true }
 
 # Web dependencies
-leptos = { version = "0.7.8", features = ["csr"], optional = true }
-leptos-use = { version = "0.15.7", features = ["use_toggle"], optional = true }
+leptos = { version = "0.8.12", features = ["csr"], optional = true }
+leptos-use = { version = "0.16.3", features = ["use_toggle"], optional = true }
 
 [dev-dependencies]
-criterion = "0.5.1"
+criterion = "0.7.0"
 num-format = "0.4.4"
-assert_cmd = "2.0"
-predicates = "3.0"
+assert_cmd = "2.1.1"
+predicates = "3.1.3"
 
 [[bench]]
 name = "benchmarks"

@@ -1,10 +1,9 @@
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use predicates::prelude::*;
 
 #[test]
 fn test_single_fibonacci() {
-    Command::cargo_bin("fib")
-        .unwrap()
+    cargo_bin_cmd!("fib")
         .args(["single", "10"])
         .assert()
         .success()
@@ -13,8 +12,7 @@ fn test_single_fibonacci() {
 
 #[test]
 fn test_range_fibonacci() {
-    Command::cargo_bin("fib")
-        .unwrap()
+    cargo_bin_cmd!("fib")
         .args(["range", "5", "7"])
         .assert()
         .success()

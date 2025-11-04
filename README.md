@@ -101,7 +101,7 @@ Specifications:
 - 15-inch MacBook Air (2025)
 - M4 Chip, 10C CPU, 10C GPU
 - 32GB Unified Memory
-- macOS Sequoia 15.4
+- macOS Tahoe 26.1
 
 | Single        | Computation Time |
 |---------------|------------------|
@@ -114,8 +114,8 @@ Specifications:
 | Range                | Computation Time |
 |----------------------|------------------|
 | F(0) -> F(1,000)     | ~57.6μs          |
-| F(0) -> F(10,000)    | ~729μs           |
-| F(0) -> F(100,000)   | ~45ms            |
+| F(0) -> F(10,000)    | ~588μs           |
+| F(0) -> F(100,000)   | ~22.4ms          |
 
 ## Algorithm Details
 
