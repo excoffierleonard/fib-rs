@@ -1,5 +1,6 @@
-use criterion::{Criterion, black_box, criterion_group, criterion_main};
+use criterion::{Criterion, criterion_group, criterion_main};
 use fib_rs::Fib;
+use std::hint::black_box;
 
 fn fib_n_benchmark(c: &mut Criterion) {
     let mut g = c.benchmark_group("F(n) Benchmarks");
