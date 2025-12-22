@@ -22,14 +22,14 @@ num-traits = "0.2.19"
 rayon = "1.11.0"
 
 # CLI dependencies
-clap = { version = "4.5.51", features = ["derive"], optional = true }
+clap = { version = "4.5.53", features = ["derive"], optional = true }
 
 # Web dependencies
-leptos = { version = "0.8.12", features = ["csr"], optional = true }
-leptos-use = { version = "0.16.3", features = ["use_toggle"], optional = true }
+leptos = { version = "0.8.15", features = ["csr"], optional = true }
+leptos-use = { version = "0.17.0", features = ["use_toggle"], optional = true }
 
 [dev-dependencies]
-criterion = "0.7.0"
+criterion = "0.8.1"
 num-format = "0.4.4"
 assert_cmd = "2.1.1"
 predicates = "3.1.3"
