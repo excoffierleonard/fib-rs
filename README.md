@@ -7,7 +7,7 @@
 
 A highly optimized Fibonacci number calculator for Rust that efficiently computes arbitrarily large Fibonacci numbers.
 
-**[Try the web demo](https://excoffierleonard.github.io/fib-rs/)**
+**[Try the web demo](https://fib.excoffierleonard.com)**
 
 ## Table of Contents
 
@@ -141,7 +141,7 @@ This hybrid approach provides excellent performance for generating sequences of 
 
 ## Web Demo
 
-Try the interactive [web demo](https://excoffierleonard.github.io/fib-rs/) to calculate Fibonacci numbers directly in your browser. The demo showcases the library's performance and capabilities through a WebAssembly implementation.
+Try the interactive [web demo](https://fib.excoffierleonard.com) to calculate Fibonacci numbers directly in your browser. The demo showcases the library's performance and capabilities through a WebAssembly implementation.
 
 ## License
 
