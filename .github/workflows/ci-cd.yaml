@@ -50,7 +50,7 @@ jobs:
 
       - name: Dry run publish for crate
         run: |
-          cargo publish --dry-run 2>&1 | tee /dev/stderr | (! grep -q -v "^warning: aborting upload due to dry run" | grep -q "^warning:")
+          cargo publish --dry-run 2>&1 | tee /dev/stderr | grep -v "^warning: aborting upload due to dry run" | grep -q "^warning:" && exit 1 || true
 
   publish-crate:
     name: Publish crate to crates.io
