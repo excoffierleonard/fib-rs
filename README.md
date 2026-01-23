@@ -39,10 +39,16 @@ cargo add fib-rs --no-default-features
 
 ### CLI Tool
 
-To install the command-line tool:
+To install the command-line tool with cargo for all platforms (recommended):
 
 ```bash
 cargo install fib-rs
+```
+
+Or for Linux only:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/excoffierleonard/fib-rs/main/scripts/install.sh | sh
 ```
 
 ## Usage
