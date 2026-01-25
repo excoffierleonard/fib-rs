@@ -49,7 +49,7 @@
 
 use std::{
     cmp::{max, min},
-    mem::replace,
+    mem::{replace, take},
 };
 
 use num_bigint::BigUint;
@@ -241,40 +241,31 @@ impl Fib {
 
         // Process each chunk in parallel using Rayon's parallel iterator
         // Each thread calculates a portion of the Fibonacci sequence independently
-        let results: Vec<Vec<BigUint>> = chunks
+        chunks
             .par_iter()
-            .map(|&(chunk_start, chunk_end)| {
+            .flat_map_iter(|&(chunk_start, chunk_end)| {
                 let chunk_size = (chunk_end - chunk_start + 1) as usize;
-                let mut result = Vec::with_capacity(chunk_size);
 
                 // Use the fast doubling algorithm to efficiently find the starting values
                 // for this chunk. This is a key optimization for chunk initialization.
                 let (mut a, mut b) = Self::fib_fast_doubling_helper(chunk_start);
+                let mut remaining = chunk_size;
 
-                // Add the first value (F(chunk_start)) to the result
-                result.push(a.clone());
-
-                // Compute the rest of the chunk iteratively using the recurrence relation:
+                // Compute the chunk iteratively using the recurrence relation:
                 // F(n+2) = F(n+1) + F(n)
                 // This is more efficient than using the fast doubling algorithm for each number
-                for _ in 1..chunk_size {
+                std::iter::from_fn(move || {
+                    if remaining == 0 {
+                        return None;
+                    }
                     let next = &a + &b;
-                    a = replace(&mut b, next); // Efficiently swap values
-                    result.push(a.clone());
-                }
-
-                result
+                    let out = take(&mut a);
+                    a = replace(&mut b, next);
+                    remaining -= 1;
+                    Some(out)
+                })
             })
-            .collect();
-
-        // Combine results from all chunks into a single, continuous vector
-        // Pre-allocate the exact size needed to avoid multiple reallocations
-        let mut result = Vec::with_capacity(total_count);
-        for chunk in results {
-            result.extend(chunk);
-        }
-
-        result
+            .collect()
     }
 }
 
