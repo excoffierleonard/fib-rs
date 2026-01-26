@@ -20,7 +20,7 @@ fn App() -> impl IntoView {
     let (result, set_result) = signal(Vec::<String>::new());
 
     view! {
-        <div class="app-container">
+        <main class="app-container">
             <h1 class="app-title">"Fibonacci Calculator"</h1>
             <div class="mode-toggle">
                 <div class="toggle-label" class:toggle-active=move || value.get()>
@@ -47,7 +47,7 @@ fn App() -> impl IntoView {
                     <p class="result-line">{line}</p>
                 </For>
             </div>
-        </div>
+        </main>
     }
 }
 
