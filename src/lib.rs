@@ -49,6 +49,7 @@
 
 use std::{
     cmp::{max, min},
+    iter::from_fn,
     mem::{replace, take},
 };
 
@@ -70,8 +71,7 @@ type FibPair = (BigUint, BigUint);
 /// The implementation uses a fast doubling algorithm for O(log n) time complexity
 /// and leverages parallel processing for range calculations to maximize performance.
 ///
-/// For Fibonacci numbers beyond F(185), the implementation automatically switches to
-/// using `BigUint` for arbitrary precision, ensuring correct results for extremely large
+/// Uses `BigUint` for arbitrary precision, ensuring correct results for extremely large
 /// Fibonacci numbers.
 pub struct Fib;
 
@@ -149,6 +149,7 @@ impl Fib {
         let f2k1 = &fk * &fk + &fk1 * &fk1; // F(2k+1) = F(k)^2 + F(k+1)^2
 
         // Return appropriate pair based on whether n is even or odd
+        // Already internally does a bitwise operation
         if n.is_multiple_of(2) {
             (f2k, f2k1)
         } else {
@@ -254,7 +255,7 @@ impl Fib {
                 // Compute the chunk iteratively using the recurrence relation:
                 // F(n+2) = F(n+1) + F(n)
                 // This is more efficient than using the fast doubling algorithm for each number
-                std::iter::from_fn(move || {
+                from_fn(move || {
                     if remaining == 0 {
                         return None;
                     }
