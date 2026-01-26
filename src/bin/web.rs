@@ -1,7 +1,6 @@
 use fib_rs::Fib;
-use leptos::mount::mount_to_body;
 use leptos::prelude::*;
-use leptos_use::{UseToggleReturn, use_toggle};
+use leptos_use::{UseToggleReturn, use_toggle, use_window};
 
 fn main() {
     mount_to_body(App);
@@ -58,6 +57,8 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
     // Range mode signals
     let (start, set_start) = signal(Ok(0u128));
     let (end, set_end) = signal(Ok(0u128));
+    // Timer
+    let (elapsed, set_elapsed) = signal(None::<f64>);
 
     // Helper function to format number for display
     let format_num = |result: Result<u128, _>| -> String {
@@ -75,31 +76,39 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
     let end_display = move || format_num(end.get());
 
     // Combined calculate function that handles both modes
-    let calculate = move |_| match is_single_mode.get() {
-        true => match value.get() {
-            Ok(n) => {
-                let result = Fib::single(n);
-                set_result.set(vec![format!("F({}) = {}", n, result)]);
-            }
-            Err(_) => set_result.set(vec!["Please enter a valid number".to_string()]),
-        },
-        false => match (start.get(), end.get()) {
-            (Ok(start_val), Ok(end_val)) if start_val > end_val => {
-                set_result.set(vec!["Invalid range: end < start".to_string()]);
-            }
-            (Ok(start_val), Ok(end_val)) => {
-                let results = Fib::range(start_val, end_val);
-                let formatted = results
-                    .into_iter()
-                    .enumerate()
-                    .map(|(i, v)| format!("F({}) = {}", start_val + i as u128, v))
-                    .collect();
-                set_result.set(formatted);
-            }
-            _ => {
-                set_result.set(vec!["Invalid input(s).".to_string()]);
-            }
-        },
+    let perf = use_window().as_ref().and_then(|w| w.performance());
+    let calculate = move |_| {
+        let start_time = perf.as_ref().map(|p| p.now());
+        match is_single_mode.get() {
+            true => match value.get() {
+                Ok(n) => {
+                    let result = Fib::single(n);
+                    set_result.set(vec![format!("F({}) = {}", n, result)]);
+                }
+                Err(_) => set_result.set(vec!["Please enter a valid number".to_string()]),
+            },
+            false => match (start.get(), end.get()) {
+                (Ok(start_val), Ok(end_val)) if start_val > end_val => {
+                    set_result.set(vec!["Invalid range: end < start".to_string()]);
+                }
+                (Ok(start_val), Ok(end_val)) => {
+                    let results = Fib::range(start_val, end_val);
+                    let formatted = results
+                        .into_iter()
+                        .enumerate()
+                        .map(|(i, v)| format!("F({}) = {}", start_val + i as u128, v))
+                        .collect();
+                    set_result.set(formatted);
+                }
+                _ => {
+                    set_result.set(vec!["Invalid input(s).".to_string()]);
+                }
+            },
+        }
+        let end_time = perf.as_ref().map(|p| p.now());
+        if let (Some(start), Some(end)) = (start_time, end_time) {
+            set_elapsed.set(Some((end - start) / 1000.0));
+        }
     };
 
     view! {
@@ -138,6 +147,11 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                 on:input=move |ev| { set_value.set(event_target_value(&ev).parse::<u128>()) }
             />
         </Show>
-        <button on:click=calculate>"Calculate"</button>
+        <div class="calculate-row">
+            <button on:click=calculate>"Calculate"</button>
+            <Show when=move || elapsed.get().is_some()>
+                <span class="timer">{move || elapsed.get().map(|t| format!("{:.3}s", t))}</span>
+            </Show>
+        </div>
     }
 }
