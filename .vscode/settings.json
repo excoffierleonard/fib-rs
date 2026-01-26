@@ -4,6 +4,13 @@
         "--stdin",
         "--rustfmt"
     ],
+    "rust-analyzer.cargo.features": [
+        "web"
+    ],
+    "rust-analyzer.check.features": [
+        "web"
+    ],
+    "rust-analyzer.cargo.target": "wasm32-unknown-unknown",
     "editor.formatOnSave": true,
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer",
