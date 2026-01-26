@@ -141,6 +141,29 @@ button:focus {
   box-shadow: var(--focus-ring-default);
 }
 
+/* Calculate row with timer */
+.calculate-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.calculate-row button {
+  margin-bottom: 0;
+}
+
+.timer {
+  position: absolute;
+  left: calc(50% + 5rem);
+  background-color: var(--color-result-bg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+}
+
 /* Results display with better readability */
 .result-line {
   background-color: var(--color-result-bg);
