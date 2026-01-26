@@ -721,7 +721,6 @@ dependencies = [
  "assert_cmd",
  "clap",
  "criterion",
- "js-sys",
  "leptos",
  "leptos-use",
  "num-bigint",
@@ -729,6 +728,7 @@ dependencies = [
  "num-traits",
  "predicates",
  "rayon",
+ "web-sys",
 ]
 
 [[package]]

@@ -13,8 +13,7 @@ readme = "README.md"
 [features]
 default = ["cli"]
 cli = ["clap"]
-web = ["leptos", "leptos-use", "js-sys"]
-js-sys = ["dep:js-sys"]
+web = ["leptos", "leptos-use", "web-sys"]
 
 [dependencies]
 # Core dependencies
@@ -28,7 +27,10 @@ clap = { version = "4.5.54", features = ["derive"], optional = true }
 # Web dependencies
 leptos = { version = "0.8.15", features = ["csr"], optional = true }
 leptos-use = { version = "0.18.0", features = ["use_toggle"], optional = true }
-js-sys = { version = "0.3.85", optional = true }
+web-sys = { version = "0.3.85", features = [
+    "Window",
+    "Performance",
+], optional = true }
 
 [dev-dependencies]
 criterion = "0.8.1"
