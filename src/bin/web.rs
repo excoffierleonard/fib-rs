@@ -1,8 +1,6 @@
 use fib_rs::Fib;
-use leptos::mount::mount_to_body;
 use leptos::prelude::*;
-use leptos_use::{UseToggleReturn, use_toggle};
-use web_sys::window;
+use leptos_use::{UseToggleReturn, use_toggle, use_window};
 
 fn main() {
     mount_to_body(App);
@@ -78,9 +76,9 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
     let end_display = move || format_num(end.get());
 
     // Combined calculate function that handles both modes
-    let perf = window().unwrap().performance().unwrap();
+    let perf = use_window().as_ref().and_then(|w| w.performance());
     let calculate = move |_| {
-        let start_time = perf.now();
+        let start_time = perf.as_ref().map(|p| p.now());
         match is_single_mode.get() {
             true => match value.get() {
                 Ok(n) => {
@@ -107,8 +105,10 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                 }
             },
         }
-        let end_time = perf.now();
-        set_elapsed.set(Some((end_time - start_time) / 1000.0));
+        let end_time = perf.as_ref().map(|p| p.now());
+        if let (Some(start), Some(end)) = (start_time, end_time) {
+            set_elapsed.set(Some((end - start) / 1000.0));
+        }
     };
 
     view! {

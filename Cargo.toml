@@ -26,11 +26,11 @@ clap = { version = "4.5.54", features = ["derive"], optional = true }
 
 # Web dependencies
 leptos = { version = "0.8.15", features = ["csr"], optional = true }
-leptos-use = { version = "0.18.0", features = ["use_toggle"], optional = true }
-web-sys = { version = "0.3.85", features = [
-    "Window",
-    "Performance",
+leptos-use = { version = "0.18.0", features = [
+    "use_toggle",
+    "use_window",
 ], optional = true }
+web-sys = { version = "0.3.85", features = ["Performance"], optional = true }
 
 [dev-dependencies]
 criterion = "0.8.1"
