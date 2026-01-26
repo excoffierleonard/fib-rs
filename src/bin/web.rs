@@ -68,10 +68,11 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
         }
     };
 
-    // Create memoized values for display formatting
-    let value_display = Memo::new(move |_| format_num(value.get()));
-    let start_display = Memo::new(move |_| format_num(start.get()));
-    let end_display = Memo::new(move |_| format_num(end.get()));
+    // Create formatted values for display
+    // We removed memoization here to simplify the code since the values are relatively cheap to compute
+    let value_display = move || format_num(value.get());
+    let start_display = move || format_num(start.get());
+    let end_display = move || format_num(end.get());
 
     // Combined calculate function that handles both modes
     let calculate = move |_| match is_single_mode.get() {
@@ -111,18 +112,18 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                             class="number-input"
                             type="number"
                             placeholder="Start"
-                            prop:value=move || start_display.get()
-                            on:input:target=move |ev| {
-                                set_start.set(ev.target().value().parse::<u128>())
+                            prop:value=start_display
+                            on:input=move |ev| {
+                                set_start.set(event_target_value(&ev).parse::<u128>())
                             }
                         />
                         <input
                             class="number-input"
                             type="number"
                             placeholder="End"
-                            prop:value=move || end_display.get()
-                            on:input:target=move |ev| {
-                                set_end.set(ev.target().value().parse::<u128>())
+                            prop:value=end_display
+                            on:input=move |ev| {
+                                set_end.set(event_target_value(&ev).parse::<u128>())
                             }
                         />
                     </div>
@@ -133,8 +134,8 @@ fn Calculator(set_result: WriteSignal<Vec<String>>, is_single_mode: Signal<bool>
                 class="number-input"
                 type="number"
                 placeholder="Enter a number"
-                prop:value=move || value_display.get()
-                on:input:target=move |ev| { set_value.set(ev.target().value().parse::<u128>()) }
+                prop:value=value_display
+                on:input=move |ev| { set_value.set(event_target_value(&ev).parse::<u128>()) }
             />
         </Show>
         <button on:click=calculate>"Calculate"</button>
