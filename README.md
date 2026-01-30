@@ -4,6 +4,7 @@
 [![Crates.io](https://img.shields.io/crates/d/fib-rs)](https://crates.io/crates/fib-rs)
 [![Documentation](https://img.shields.io/docsrs/fib-rs)](https://docs.rs/fib-rs)
 [![MIT](https://img.shields.io/crates/l/fib-rs)](LICENSE)
+[![CI/CD](https://github.com/excoffierleonard/fib-rs/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/excoffierleonard/fib-rs/actions/workflows/ci-cd.yaml)
 
 A highly optimized Fibonacci number calculator for Rust that efficiently computes arbitrarily large Fibonacci numbers.
 
