@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "1.2.1"
+version = "1.2.2"
 edition = "2024"
 description = "A highly optimized Fibonacci number calculator for Rust that efficiently computes arbitrarily large Fibonacci numbers."
 repository = "https://github.com/excoffierleonard/fib-rs"

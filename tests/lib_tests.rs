@@ -18,3 +18,9 @@ fn test_range_consistency() {
         assert_eq!(range_results[i], Fib::single(n));
     }
 }
+
+#[test]
+fn test_invalid_range_returns_empty() {
+    let range_results = Fib::range(10, 5);
+    assert!(range_results.is_empty());
+}
