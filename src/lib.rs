@@ -8,7 +8,7 @@
 //! - **Fast doubling algorithm**: Calculates Fibonacci numbers in O(log n) time
 //! - **Handles massive inputs**: Compute Fibonacci numbers up to F(10,000,000) and beyond
 //! - **Range calculation**: Generate sequences of consecutive Fibonacci numbers with parallel processing
-//! - **BigUint support**: Uses arbitrary precision integers for handling large Fibonacci numbers
+//! - **`BigUint` support**: Uses arbitrary precision integers for handling large Fibonacci numbers
 //!
 //! ## Examples
 //!
@@ -105,6 +105,7 @@ impl Fib {
     /// assert_eq!(Fib::single(10), BigUint::from(55u32)); // F(10) = 55
     /// assert!(Fib::single(200) > BigUint::from(u128::MAX)); // Large value example (would overflow primitive types)
     /// ```
+    #[must_use]
     pub fn single(n: u128) -> BigUint {
         match n {
             0 => BigUint::zero(),
@@ -134,6 +135,7 @@ impl Fib {
     /// # Time Complexity
     ///
     /// * O(log n) due to the recursive divide-and-conquer approach
+    #[allow(clippy::similar_names)] // Mathematical notation: F(k), F(k+1), F(2k), F(2k+1)
     fn fib_fast_doubling_helper(n: u128) -> FibPair {
         if n == 0 {
             return (BigUint::zero(), BigUint::one());
@@ -213,6 +215,7 @@ impl Fib {
     /// let large_range = Fib::range(1000, 10999);
     /// assert_eq!(large_range.len(), 10000);
     /// ```
+    #[must_use]
     pub fn range(start: u128, end: u128) -> Vec<BigUint> {
         // Validate input range
         if end < start {
@@ -333,7 +336,7 @@ mod tests {
     #[test]
     fn loop_over_fibonacci() {
         for i in 0..=1000 {
-            Fib::single(i);
+            let _ = Fib::single(i);
         }
     }
 
@@ -361,7 +364,7 @@ mod tests {
         ];
 
         for (start, end) in ranges {
-            Fib::range(start, end);
+            let _ = Fib::range(start, end);
         }
     }
 }
