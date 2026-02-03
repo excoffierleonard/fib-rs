@@ -30,7 +30,7 @@ fn main() {
     match &cli.command {
         Commands::Single { n } => {
             let result = Fib::single(*n);
-            println!("F({}) = {}", n, result);
+            println!("F({n}) = {result}");
         }
         Commands::Range { start, end } => {
             let results = Fib::range(*start, *end);
@@ -42,7 +42,7 @@ fn main() {
 
             (*start..=*end)
                 .zip(results.iter())
-                .for_each(|(i, result)| println!("F({}) = {}", i, result));
+                .for_each(|(i, result)| println!("F({i}) = {result}"));
         }
     }
 }
