@@ -1,6 +1,6 @@
 [package]
 name = "fib-rs"
-version = "1.2.3"
+version = "1.2.4"
 edition = "2024"
 description = "A highly optimized Fibonacci number calculator for Rust that efficiently computes arbitrarily large Fibonacci numbers."
 repository = "https://github.com/excoffierleonard/fib-rs"
@@ -22,7 +22,7 @@ num-traits = "0.2.19"
 rayon = "1.11.0"
 
 # CLI dependencies
-clap = { version = "4.5.56", features = ["derive"], optional = true }
+clap = { version = "4.5.57", features = ["derive"], optional = true }
 
 # Web dependencies
 leptos = { version = "0.8.15", features = ["csr"], optional = true }
@@ -33,7 +33,7 @@ leptos-use = { version = "0.18.0", features = [
 web-sys = { version = "0.3.85", features = ["Performance"], optional = true }
 
 [dev-dependencies]
-criterion = "0.8.1"
+criterion = "0.8.2"
 num-format = "0.4.4"
 assert_cmd = "2.1.2"
 predicates = "3.1.3"
